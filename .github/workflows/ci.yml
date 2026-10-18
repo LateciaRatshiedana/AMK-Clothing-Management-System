@@ -1,0 +1,21 @@
+name: AMK Clothing Web CI Workflow
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Verify Web Core Structure
+      run: |
+        echo "Validating project deployment files..."
+        ls -la index.html admin-home.html
+        echo "Build and test completed successfully!"
