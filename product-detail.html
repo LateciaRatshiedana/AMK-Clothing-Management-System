@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMK Clothing - Custom Bespoke Outfit</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { background-color: #ffffff; font-family: Arial, sans-serif; margin: 0; color: #000000; }
+    
+    .product-detail-container {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .product-detail-container { grid-template-columns: 1fr; }
+    }
+
+    /* IMAGE SLIDER STYLES */
+    .slider-container {
+      position: relative;
+      width: 100%;
+      height: 520px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+    }
+    .slider-slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+    }
+    .slider-slide.active {
+      display: block;
+    }
+    .slider-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .slider-counter {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      background: rgba(0, 0, 0, 0.6);
+      color: #ffffff;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.8);
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+      color: #0f172a;
+      transition: background 0.2s;
+    }
+    .slider-btn:hover { background: #ffffff; }
+    .slider-prev { left: 12px; }
+    .slider-next { right: 12px; }
+
+    /* PRODUCT INFO SIDE */
+    .product-info-side h1 {
+      font-size: 24px;
+      font-weight: 900;
+      line-height: 1.4;
+      margin: 0 0 10px 0;
+      color: #0f172a;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .current-price {
+      font-size: 24px;
+      font-weight: 900;
+      color: #227b75;
+    }
+
+    .rating-summary {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 20px;
+    }
+    .rating-summary i { color: #f59e0b; }
+
+    /* SIZE SELECTOR PILLS */
+    .size-title-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: #0f172a;
+    }
+
+    .size-pills-grid {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .size-pill-btn {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #0f172a;
+      transition: all 0.2s ease;
+    }
+    .size-pill-btn:hover, .size-pill-btn.active {
+      border-color: #000000;
+      background-color: #000000;
+      color: #ffffff;
+    }
+
+    /* ACTION ROW */
+    .action-bottom-row {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .wishlist-heart-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #0f172a;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .wishlist-heart-btn:hover {
+      border-color: #0f172a;
+    }
+    /* Navy Blue Wishlist Active State */
+    .wishlist-heart-btn.favorited {
+      color: #1e3a8a !important; 
+      border-color: #1e3a8a !important;
+      background: #eff6ff !important;
+    }
+
+    .add-to-cart-action-btn {
+      flex: 1;
+      background-color: #000000;
+      color: #ffffff;
+      border: none;
+      padding: 16px;
+      font-weight: 900;
+      font-size: 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: background 0.2s;
+    }
+    .add-to-cart-action-btn:hover {
+      background-color: #222222;
+    }
+
+    /* CUSTOMER REVIEWS SECTION */
+    .reviews-container {
+      max-width: 1000px;
+      margin: 50px auto;
+      padding: 0 20px;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 40px;
+    }
+    .reviews-heading {
+      font-size: 20px;
+      font-weight: 900;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+    .review-card {
+      background: #f8fafc;
+      border: 1px solid #f1f5f9;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+    }
+    .review-header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .verified-buyer-badge {
+      background-color: #d1fae5;
+      color: #065f46;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .review-img-thumb {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-top: 10px;
+      border: 1px solid #cbd5e1;
+    }
+
+    /* SUBMIT REVIEW BOX (VERIFIED PURCHASERS ONLY WITH PHOTO UPLOAD) */
+    .submit-review-box {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 24px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo">AMK CLOTHING</div>
+    <div class="nav-icons">
+      <a href="index.html" class="signin-header-btn" style="text-decoration: none;">
+        <i class="fa-solid fa-store"></i> Back to Store
+      </a>
+    </div>
+  </header>
+
+  <!-- PRODUCT DETAIL SECTION -->
+  <div class="product-detail-container">
+    
+    <!-- IMAGE SLIDER (MULTIPLE VIEWS) -->
+    <div>
+      <div class="slider-container" id="productSlider">
+        <div class="slider-slide active">
+          <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80" alt="View 1">
+        </div>
+        <div class="slider-slide">
+          <img src="https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=800&q=80" alt="View 2">
+        </div>
+        <div class="slider-slide">
+          <img src="https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?auto=format&fit=crop&w=800&q=80" alt="View 3">
+        </div>
+
+        <button class="slider-btn slider-prev" onclick="moveSlide(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="slider-btn slider-next" onclick="moveSlide(1)"><i class="fa-solid fa-chevron-right"></i></button>
+        
+        <div class="slider-counter" id="slideCounter">1/3</div>
+      </div>
+    </div>
+
+    <!-- PRODUCT INFO -->
+    <div>
+      <span style="font-size: 12px; font-weight: 800; color: #227b75; text-transform: uppercase; letter-spacing: 0.5px;">AMK Bespoke Collection</span>
+      <h1 id="productTitle">Signature Custom Tailored Evening Dress</h1>
+      
+      <div class="price-row">
+        <span class="current-price" id="productPrice">R 1,850.00</span>
+      </div>
+
+      <div class="rating-summary">
+        <i class="fa-solid fa-star"></i> <span id="avgRatingDisplay">No ratings yet</span> 
+        <span style="color: #64748b; font-weight: normal;" id="reviewCountDisplay">(0 Verified Reviews)</span>
+      </div>
+
+      <p style="font-size: 13px; color: #64748b; line-height: 1.6; margin-bottom: 20px;">
+        Handcrafted to order by our master tailors in Johannesburg. Select your size variant below or message support for custom body measurements.
+      </p>
+
+      <!-- SIZE SELECTION -->
+      <div class="size-title-row">
+        <span>Size: <span id="selectedSizeLabel" style="font-weight: normal; color: #64748b;">Select size</span></span>
+        <a href="#" onclick="alert('Opening AMK Sizing & Measurement Guide.'); return false;" style="color: #227b75; text-decoration: none;">Size Guide &gt;</a>
+      </div>
+
+      <div class="size-pills-grid" id="sizeOptionsGrid">
+        <button class="size-pill-btn" onclick="selectSize(this, 'XXS')">XXS</button>
+        <button class="size-pill-btn" onclick="selectSize(this, 'XS')">XS</button>
+        <button class="size-pill-btn" onclick="selectSize(this, 'S')">S</button>
+        <button class="size-pill-btn" onclick="selectSize(this, 'M')">M</button>
+        <button class="size-pill-btn" onclick="selectSize(this, 'L')">L</button>
+        <button class="size-pill-btn" onclick="selectSize(this, 'XL')">XL</button>
+      </div>
+
+      <!-- ACTION ROW (WISHLIST NAVY BLUE HEART & ADD TO CART) -->
+      <div class="action-bottom-row">
+        <button class="wishlist-heart-btn" id="wishlistBtn" onclick="toggleNavyWishlist()" title="Add to Wishlist">
+          <i class="fa-solid fa-heart"></i>
+        </button>
+        <button class="add-to-cart-action-btn" onclick="addToCartClicked()">
+          ADD TO CART
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CUSTOMER REVIEWS SECTION (VERIFIED PURCHASERS ONLY WITH PHOTO UPLOAD) -->
+  <section class="reviews-container">
+    <div class="reviews-heading">Customer Reviews</div>
+    <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">
+      Reviews are exclusively written by verified customers who purchased and received this bespoke item.
+    </p>
+
+    <!-- REVIEWS LIST -->
+    <div id="verifiedReviewsList">
+      <p id="noReviewsNotice" style="font-style: italic; color: #94a3b8; font-size: 14px;">No reviews yet. Be the first verified customer to review this bespoke design after purchase!</p>
+    </div>
+
+    <!-- SUBMIT REVIEW FORM (VERIFIED PURCHASERS ONLY) -->
+    <div class="submit-review-box">
+      <h3 style="margin: 0 0 6px 0; font-size: 16px; font-weight: 800;">Write a Verified Review</h3>
+      <p style="font-size: 12px; color: #64748b; margin-bottom: 16px;">
+        You must enter a valid order reference number (e.g. #AMK-8891) and <strong>upload a photo of your custom product</strong> to post a review.
+      </p>
+
+      <form onsubmit="submitVerifiedReview(event)">
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 4px;">Order Reference Number</label>
+          <input type="text" id="orderRefInput" placeholder="e.g. #AMK-8891" required style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px; box-sizing: border-box;">
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 4px;">Rating</label>
+          <select id="reviewRatingSelect" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px; background: white;">
+            <option value="5">★★★★★ (5 Stars)</option>
+            <option value="4">★★★★☆ (4 Stars)</option>
+            <option value="3">★★★☆☆ (3 Stars)</option>
+            <option value="2">★★☆☆☆ (2 Stars)</option>
+            <option value="1">★☆☆☆☆ (1 Star)</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 4px;">Upload Photo of Your Product</label>
+          <input type="file" id="reviewImageInput" accept="image/*" required style="width: 100%; font-size: 13px; padding: 6px 0;">
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 4px;">Your Review Comments</label>
+          <textarea id="reviewTextComment" rows="3" placeholder="Share how your custom tailored outfit fit..." required style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px; box-sizing: border-box; outline: none;"></textarea>
+        </div>
+
+        <button type="submit" style="background-color: #227b75; color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 4px; cursor: pointer; font-size: 13px;">
+          Submit Verified Review
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    // IMAGE SLIDER LOGIC
+    let currentSlideIndex = 0;
+    const slides = document.querySelectorAll('.slider-slide');
+
+    function moveSlide(direction) {
+      slides[currentSlideIndex].classList.remove('active');
+      currentSlideIndex += direction;
+      if (currentSlideIndex >= slides.length) currentSlideIndex = 0;
+      if (currentSlideIndex < 0) currentSlideIndex = slides.length - 1;
+      slides[currentSlideIndex].classList.add('active');
+      document.getElementById('slideCounter').textContent = `${currentSlideIndex + 1}/${slides.length}`;
+    }
+
+    // SIZE SELECTION LOGIC
+    let selectedSize = "";
+    function selectSize(btn, sizeVal) {
+      document.querySelectorAll('.size-pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedSize = sizeVal;
+      document.getElementById('selectedSizeLabel').textContent = sizeVal;
+    }
+
+    // NAVY BLUE WISHLIST HEART LOGIC
+    function toggleNavyWishlist() {
+      const btn = document.getElementById('wishlistBtn');
+      btn.classList.toggle('favorited');
+      
+      if (btn.classList.contains('favorited')) {
+        alert("Added to your Wishlist!");
+      } else {
+        alert("Removed from your Wishlist.");
+      }
+    }
+
+    // ADD TO CART LOGIC
+    function addToCartClicked() {
+      if (!selectedSize) {
+        alert("Please select a size (XXS, XS, S, M, L, XL) before adding to cart.");
+        return;
+      }
+      alert("Successfully added to cart in size " + selectedSize + "!");
+    }
+
+    let reviewDataList = [];
+
+    // VERIFIED PURCHASER REVIEW SUBMISSION WITH PHOTO UPLOAD
+    function submitVerifiedReview(e) {
+      e.preventDefault();
+      const orderRef = document.getElementById('orderRefInput').value.trim();
+      const comment = document.getElementById('reviewTextComment').value.trim();
+      const rating = parseInt(document.getElementById('reviewRatingSelect').value);
+      const imageInput = document.getElementById('reviewImageInput');
+      const userName = localStorage.getItem('userName') || "Verified Client";
+
+      // Strict verification check
+      if (!orderRef.startsWith("#AMK")) {
+        alert("Verification Error: Invalid order reference number. Only verified customers with a completed AMK order can submit reviews.");
+        return;
+      }
+
+      if (imageInput.files.length === 0) {
+        alert("Product Photo Required: Please upload a photo of your custom product to submit your review.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const imageUrl = event.target.result;
+
+        reviewDataList.push({ name: userName, order: orderRef, rating: rating, comment: comment, image: imageUrl });
+        renderReviews();
+
+        alert("Review successfully verified and posted!");
+        e.target.reset();
+      };
+      reader.readAsDataURL(imageInput.files[0]);
+    }
+
+    function renderReviews() {
+      const listContainer = document.getElementById('verifiedReviewsList');
+      listContainer.innerHTML = "";
+
+      if (reviewDataList.length === 0) {
+        listContainer.innerHTML = `<p id="noReviewsNotice" style="font-style: italic; color: #94a3b8; font-size: 14px;">No reviews yet. Be the first verified customer to review this bespoke design after purchase!</p>`;
+        document.getElementById('avgRatingDisplay').textContent = "No ratings yet";
+        document.getElementById('reviewCountDisplay').textContent = "(0 Verified Reviews)";
+        return;
+      }
+
+      let totalScore = 0;
+      reviewDataList.forEach(rev => {
+        totalScore += rev.rating;
+        let stars = '<i class="fa-solid fa-star"></i>'.repeat(rev.rating);
+
+        listContainer.innerHTML += `
+          <div class="review-card">
+            <div class="review-header-flex">
+              <div>
+                <strong style="font-size: 14px; color: #0f172a;">${rev.name}</strong>
+                <div style="color: #f59e0b; font-size: 12px; margin-top: 2px;">${stars}</div>
+              </div>
+              <span class="verified-buyer-badge"><i class="fa-solid fa-check-circle"></i> Verified Buyer (${rev.order})</span>
+            </div>
+            <p style="font-size: 13px; color: #334155; margin: 8px 0;">${escapeHtml(rev.comment)}</p>
+            <img src="${rev.image}" alt="Customer product photo" class="review-img-thumb">
+          </div>
+        `;
+      });
+
+      let avg = (totalScore / reviewDataList.length).toFixed(2);
+      document.getElementById('avgRatingDisplay').textContent = avg;
+      document.getElementById('reviewCountDisplay').textContent = `(${reviewDataList.length} Verified Reviews)`;
+    }
+
+    function escapeHtml(text) {
+      const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+      return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+  </script>
+</body>
+</html>

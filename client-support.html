@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMK Clothing - Tailor Support Chat</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { background-color: #f8fafc; font-family: Arial, sans-serif; margin: 0; }
+    
+    /* CHAT CONTAINER */
+    .chat-container {
+      max-width: 800px;
+      margin: 30px auto;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      height: 75vh;
+    }
+
+    .chat-header {
+      background-color: #0f172a;
+      color: #ffffff;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chat-header h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: #fdfdfd;
+    }
+
+    /* MESSAGE BUBBLES */
+    .message {
+      max-width: 70%;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.5;
+      position: relative;
+    }
+
+    .message.client {
+      background-color: #227b75;
+      color: #ffffff;
+      align-self: flex-end;
+      border-bottom-right-radius: 2px;
+    }
+
+    .message.support {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      align-self: flex-start;
+      border-bottom-left-radius: 2px;
+    }
+
+    .message-time {
+      font-size: 10px;
+      opacity: 0.8;
+      margin-top: 6px;
+      text-align: right;
+    }
+
+    /* CHAT INPUT AREA */
+    .chat-input-area {
+      padding: 16px 24px;
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      gap: 12px;
+    }
+
+    .chat-input-area input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .chat-input-area input:focus {
+      border-color: #227b75;
+    }
+
+    .send-btn {
+      background-color: #227b75;
+      color: #ffffff;
+      border: none;
+      padding: 0 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .send-btn:hover {
+      background-color: #1a5e59;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo">AMK CLOTHING</div>
+    <div class="nav-icons">
+      <a href="index.html" class="signin-header-btn" style="text-decoration: none;">
+        <i class="fa-solid fa-store"></i> Back to Store
+      </a>
+    </div>
+  </header>
+
+  <!-- CHAT INTERFACE -->
+  <div class="chat-container">
+    <div class="chat-header">
+      <h2><i class="fa-solid fa-headset" style="color: #227b75;"></i> Master Tailor Live Support</h2>
+      <span style="font-size: 12px; color: #94a3b8;"><i class="fa-solid fa-circle" style="color: #10b981; font-size: 8px;"></i> Online</span>
+    </div>
+
+    <!-- CLEAN CHAT MESSAGES WINDOW (PRESET BUBBLES REMOVED) -->
+    <div class="chat-messages" id="chatMessagesBox">
+      <div class="message support">
+        Hello! Welcome to AMK Clothing bespoke tailoring support. How can our master tailors assist you with your custom outfit today?
+        <div class="message-time">Just now</div>
+      </div>
+    </div>
+
+    <!-- MESSAGE INPUT FORM -->
+    <form class="chat-input-area" onsubmit="sendClientMessage(event)">
+      <input type="text" id="clientMessageInput" placeholder="Type your message or ask about measurements..." autocomplete="off" required>
+      <button type="submit" class="send-btn">
+        <i class="fa-solid fa-paper-plane"></i> Send
+      </button>
+    </form>
+  </div>
+
+  <script>
+    function sendClientMessage(e) {
+      e.preventDefault();
+      const input = document.getElementById('clientMessageInput');
+      const messageText = input.value.trim();
+      if (!messageText) return;
+
+      const chatBox = document.getElementById('chatMessagesBox');
+      const timeNow = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      // Append client message
+      chatBox.innerHTML += `
+        <div class="message client">
+          ${escapeHtml(messageText)}
+          <div class="message-time">${timeNow}</div>
+        </div>
+      `;
+
+      input.value = '';
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      // Simulate automated professional tailor reply after 1 second
+      setTimeout(() => {
+        chatBox.innerHTML += `
+          <div class="message support">
+            Thank you for your message! Our master tailoring team has received your request and will get back to you shortly.
+            <div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+          </div>
+        `;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 1000);
+    }
+
+    function escapeHtml(text) {
+      const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+      return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+  </script>
+</body>
+</html>

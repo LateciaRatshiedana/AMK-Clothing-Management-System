@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMK CLOTHING - Bespoke Tailoring & Fashion</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* TAILORING WORKSHOP BANNER STYLES */
+    .workshop-banner-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 24px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    }
+
+    @media (max-width: 768px) {
+      .workshop-banner-card {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .workshop-img-box {
+      width: 100%;
+      height: 100%;
+      min-height: 220px;
+    }
+
+    .workshop-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .workshop-text-box {
+      padding: 24px 28px 24px 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    @media (max-width: 768px) {
+      .workshop-text-box {
+        padding: 0 20px 24px 20px;
+      }
+    }
+
+    .workshop-tag {
+      display: inline-block;
+      background: #e6f4f3;
+      color: #227b75;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      width: fit-content;
+    }
+
+    .workshop-heading {
+      font-size: 22px;
+      font-weight: 900;
+      color: #0f172a;
+      margin: 0 0 8px 0;
+    }
+
+    .workshop-desc {
+      font-size: 14px;
+      color: #475569;
+      line-height: 1.6;
+      margin: 0 0 16px 0;
+    }
+
+    .chat-tailor-btn {
+      background-color: #227b75;
+      color: #ffffff;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 13px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      transition: background-color 0.2s ease;
+    }
+
+    .chat-tailor-btn:hover {
+      background-color: #1a5e59;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header class="header">
+    <div class="logo">AMK CLOTHING</div>
+    
+    <!-- SEARCH FORM -->
+    <form action="search-results.html" method="GET" class="search-container">
+      <input type="text" name="q" id="searchInput" placeholder="Search satin dress, orange dress, XXS..." required />
+      <button type="submit" class="search-btn" id="searchBtn">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </form>
+
+    <div class="nav-icons">
+      <a href="login-selection.html" class="icon-btn" title="Profile">
+        <i class="fa-regular fa-user"></i>
+      </a>
+      <a href="cart.html" class="icon-btn" title="Cart">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span class="badge" id="cartBadge">0</span>
+      </a>
+      <a href="wishlist.html" class="icon-btn" title="Wishlist">
+        <i class="fa-regular fa-heart"></i>
+        <span class="badge" id="wishlistBadge">0</span>
+      </a>
+      
+      <!-- DIRECT TAILOR SUPPORT CHAT LINK -->
+      <a href="client-support.html" class="icon-btn" title="Tailor Support Chat">
+        <i class="fa-solid fa-headset"></i>
+      </a>
+
+      <button class="icon-btn" id="langBtn" title="Language" onclick="alert('Language selected: English (ZA)')">
+        <i class="fa-solid fa-globe"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- CATEGORY MENU TABS -->
+  <nav class="category-nav">
+    <button class="nav-item active" data-category="All">All</button>
+    <button class="nav-item" data-category="Women">Women</button>
+    <button class="nav-item" data-category="Curve">Curve</button>
+    <button class="nav-item" data-category="Kids">Kids</button>
+    <button class="nav-item" data-category="Men">Men</button>
+    <button class="nav-item" data-category="Traditional Attire">Traditional Attire</button>
+    <button class="nav-item" data-category="Petite">Petite</button>
+    <button class="nav-item" data-category="Accessories">Accessories</button>
+  </nav>
+
+  <!-- HERO SLIDER -->
+  <section class="hero-slider">
+    <div class="slide active">
+      <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1600&q=80" alt="Banner 1">
+      <div class="hero-content">
+        <h2>NEW SEASON STYLES</h2>
+        <p>Explore the trendiest dresses, traditional wear, and accessories.</p>
+        <button class="hero-btn">SHOP NOW</button>
+      </div>
+    </div>
+    <div class="slide">
+      <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=1600&q=80" alt="Banner 2">
+      <div class="hero-content">
+        <h2>EXCLUSIVE TRADITIONAL & MODERN</h2>
+        <p>Custom tailored designs made specifically for your look.</p>
+        <button class="hero-btn">DISCOVER</button>
+      </div>
+    </div>
+    <div class="slide">
+      <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1600&q=80" alt="Banner 3">
+      <div class="hero-content">
+        <h2>SUMMER COLLECTION 2026</h2>
+        <p>Up to 40% OFF on Curve & Petite collections.</p>
+        <button class="hero-btn">VIEW SALE</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY CIRCLES -->
+  <section class="category-circles-section">
+    <div class="circle-card" data-category="Women">
+      <div class="circle-img-wrapper">
+        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80" alt="Women">
+      </div>
+      <span>Women</span>
+    </div>
+
+    <div class="circle-card" data-category="Curve">
+      <div class="circle-img-wrapper">
+        <img src="https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=400&q=80" alt="Curve">
+      </div>
+      <span>Curve</span>
+    </div>
+
+    <div class="circle-card" data-category="Kids">
+      <div class="circle-img-wrapper">
+        <img src="https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?auto=format&fit=crop&w=400&q=80" alt="Kids">
+      </div>
+      <span>Kids</span>
+    </div>
+
+    <div class="circle-card" data-category="Men">
+      <div class="circle-img-wrapper">
+        <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=400&q=80" alt="Men">
+      </div>
+      <span>Men</span>
+    </div>
+
+    <div class="circle-card" data-category="Traditional Attire">
+      <div class="circle-img-wrapper">
+        <img src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=400&q=80" alt="Traditional Attire">
+      </div>
+      <span>Traditional Attire</span>
+    </div>
+
+    <div class="circle-card" data-category="Petite">
+      <div class="circle-img-wrapper">
+        <img src="https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?auto=format&fit=crop&w=400&q=80" alt="Petite">
+      </div>
+      <span>Petite</span>
+    </div>
+
+    <div class="circle-card" data-category="Accessories">
+      <div class="circle-img-wrapper">
+        <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=400&q=80" alt="Accessories">
+      </div>
+      <span>Accessories</span>
+    </div>
+  </section>
+
+  <!-- MAIN PRODUCT GRID SECTION -->
+  <main class="products-container" id="productsSection">
+    
+    <h3 id="categoryTitle" class="section-title">All Products</h3>
+
+    <!-- CUSTOM BESPOKE TAILORING WORKSHOP BANNER -->
+    <div class="workshop-banner-card">
+      <div class="workshop-img-box">
+        <img src="images/Outfit.png" alt="Bespoke Tailoring Workshop" id="workshopImg" onerror="this.src='https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=800&q=80'">
+      </div>
+      <div class="workshop-text-box">
+        <span class="workshop-tag"><i class="fa-solid fa-scissors"></i> Custom Made To Order</span>
+        <h2 class="workshop-heading">Bespoke Tailoring & Custom Craftsmanship</h2>
+        <p class="workshop-desc">
+          At <strong>AMK Clothing</strong>, we do not sell off-the-rack or ready-made clothes! Every single outfit you see on our catalog serves as inspiration. We custom tailor each garment according to your unique measurements, choice of fabric, and style preference.
+        </p>
+        <a href="client-support.html" class="chat-tailor-btn">
+          <i class="fa-solid fa-headset"></i> Message Our Master Tailor
+        </a>
+      </div>
+    </div>
+
+    <!-- PRODUCT DYNAMIC GRID -->
+    <div class="product-grid" id="productGrid">
+      <!-- Products render dynamically from script.js -->
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

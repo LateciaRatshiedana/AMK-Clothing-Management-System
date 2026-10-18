@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMK CLOTHING - Custom Bespoke Tailoring</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { background-color: #f8fafc; font-family: Arial, sans-serif; margin: 0; color: #000000; }
+    
+    /* HEADER NAV ICONS & SIGN IN / PROFILE BUTTON */
+    .nav-icons {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .signin-header-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: #227b75;
+      color: #ffffff;
+      text-decoration: none !important;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+
+    .signin-header-btn:hover {
+      background-color: #1a5e59;
+      transform: translateY(-1px);
+    }
+
+    /* CATEGORY NAV */
+    .category-nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      border-bottom: 1px solid #e5e5e5;
+      background-color: #ffffff;
+      padding: 12px 0;
+      overflow-x: auto;
+    }
+
+    .category-nav .nav-item {
+      background: none;
+      border: none;
+      font-size: 15px;
+      font-weight: 500;
+      color: #000000;
+      cursor: pointer;
+      padding: 4px 8px;
+      text-decoration: none !important;
+    }
+
+    .category-nav .nav-item.active {
+      color: #000000 !important;
+      font-weight: 800 !important;
+    }
+
+    /* CATEGORY CIRCLES SECTION */
+    .category-circles-section {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      padding: 40px 20px;
+      overflow-x: auto;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .circle-card {
+      text-align: center;
+      text-decoration: none;
+      color: #0f172a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .circle-img-wrapper {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid #e2e8f0;
+      background: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s;
+    }
+    .circle-card:hover .circle-img-wrapper {
+      border-color: #227b75;
+    }
+    .circle-img-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .circle-card span {
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    /* WORKSHOP BANNER */
+    .workshop-banner-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 24px;
+      margin: 30px auto 25px auto;
+      max-width: 1100px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    }
+    @media (max-width: 768px) { .workshop-banner-card { grid-template-columns: 1fr; } }
+    .workshop-img-box { width: 100%; height: 100%; min-height: 220px; }
+    .workshop-img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .workshop-text-box { padding: 24px 28px 24px 0; display: flex; flex-direction: column; justify-content: center; }
+    @media (max-width: 768px) { .workshop-text-box { padding: 0 20px 24px 20px; } }
+    .workshop-tag { display: inline-block; background: #e6f4f3; color: #227b75; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; padding: 4px 10px; border-radius: 12px; margin-bottom: 10px; width: fit-content; }
+    .workshop-heading { font-size: 22px; font-weight: 900; color: #0f172a; margin: 0 0 8px 0; }
+    .workshop-desc { font-size: 14px; color: #475569; line-height: 1.6; margin: 0 0 16px 0; }
+    .chat-tailor-btn { background-color: #227b75; color: #ffffff; border: none; padding: 12px 22px; border-radius: 6px; font-weight: bold; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; width: fit-content; }
+    .chat-tailor-btn:hover { background-color: #1a5e59; }
+
+    /* HOW IT WORKS SECTION */
+    .how-it-works-section {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 30px 24px;
+      margin: 0 auto 35px auto;
+      max-width: 1100px;
+      text-align: center;
+    }
+    .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 20px; }
+    .step-card { background: #f8fafc; border: 1px solid #f1f5f9; border-radius: 10px; padding: 22px 18px; text-align: center; }
+    .step-icon-wrapper { width: 54px; height: 54px; border-radius: 50%; background: #e2e8f0; color: #0f172a; display: inline-flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; margin-bottom: 12px; }
+
+    /* FOOTER STYLES */
+    .site-footer {
+      background-color: #0f172a;
+      color: #cbd5e1;
+      padding: 50px 20px 20px 20px;
+      margin-top: 60px;
+      font-size: 13px;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 35px;
+    }
+
+    .footer-heading {
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 800;
+      margin: 0 0 16px 0;
+      letter-spacing: 0.5px;
+    }
+
+    .footer-desc {
+      line-height: 1.6;
+      color: #94a3b8;
+      margin: 0 0 16px 0;
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+
+    .footer-links a {
+      color: #cbd5e1;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: #227b75;
+      text-decoration: underline;
+    }
+
+    .footer-contact-item {
+      color: #94a3b8;
+      line-height: 1.6;
+      margin: 0 0 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: 12px;
+    }
+
+    .footer-socials a {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #1e293b;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .footer-socials a:hover {
+      background: #227b75;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid #1e293b;
+      margin-top: 40px;
+      padding-top: 20px;
+      text-align: center;
+      color: #64748b;
+      font-size: 12px;
+    }
+
+    .footer-bottom p {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER WITH ALL 5 NAV ITEMS -->
+  <header class="header">
+    <div class="logo">AMK CLOTHING</div>
+    
+    <form action="search-results.html" method="GET" class="search-container">
+      <input type="text" name="q" id="searchInput" placeholder="Search custom dresses, suits..." required />
+      <button type="submit" class="search-btn" id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </form>
+
+    <div class="nav-icons">
+      <!-- 1. PROFILE BUTTON & DROPDOWN -->
+      <div style="position: relative; display: inline-block;">
+        <a href="javascript:void(0)" class="signin-header-btn" id="headerAuthBtn" onclick="handleProfileClick(event)">
+          <i class="fa-regular fa-user" id="headerAuthIcon"></i>
+          <span id="headerAuthText">Latecia</span>
+        </a>
+
+        <!-- STOREFRONT PROFILE DROPDOWN MENU -->
+        <div id="storefrontProfileDropdown" style="display: none; position: absolute; right: 0; top: 42px; background: #ffffff; color: #0f172a; border: 1px solid #e2e8f0; border-radius: 8px; width: 240px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 1000; padding: 12px 0;">
+          <div style="padding: 8px 16px 12px 16px; border-bottom: 1px solid #f1f5f9;">
+            <strong id="dropdownClientName" style="font-size: 14px; display: block; color: #0f172a;">Latecia</strong>
+            <span id="dropdownClientEmail" style="font-size: 12px; color: #64748b;">latecia@rosebank.co.za</span>
+          </div>
+          
+          <div style="padding: 6px 0;">
+            <a href="javascript:void(0)" onclick="openEditProfileModal();" style="display: flex; align-items: center; gap: 8px; padding: 8px 16px; color: #0f172a; text-decoration: none; font-size: 13px;">
+              <i class="fa-solid fa-user-pen" style="color: #227b75;"></i> Edit Profile
+            </a>
+            <a href="client-support.html" style="display: flex; align-items: center; gap: 8px; padding: 8px 16px; color: #0f172a; text-decoration: none; font-size: 13px;">
+              <i class="fa-solid fa-headset" style="color: #227b75;"></i> Tailor Support Chat
+            </a>
+            <a href="wishlist.html" style="display: flex; align-items: center; gap: 8px; padding: 8px 16px; color: #0f172a; text-decoration: none; font-size: 13px;">
+              <i class="fa-regular fa-heart" style="color: #227b75;"></i> My Wishlist
+            </a>
+          </div>
+
+          <button onclick="logoutClient()" style="width: 100%; text-align: left; background: none; border: none; padding: 10px 16px; color: #ef4444; font-size: 13px; font-weight: bold; cursor: pointer; border-top: 1px solid #f1f5f9; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-right-from-bracket"></i> Log Out
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. CART ICON -->
+      <a href="cart.html" class="icon-btn" title="Cart" onclick="return checkClientAuth('access your shopping cart');">
+        <i class="fa-solid fa-cart-shopping"></i><span class="badge" id="cartBadge">0</span>
+      </a>
+
+      <!-- 3. WISHLIST ICON -->
+      <a href="wishlist.html" class="icon-btn" title="Wishlist" onclick="return checkClientAuth('view your wishlist');">
+        <i class="fa-regular fa-heart"></i><span class="badge" id="wishlistBadge">0</span>
+      </a>
+
+      <!-- 4. TAILOR SUPPORT CHAT ICON -->
+      <a href="client-support.html" class="icon-btn" title="Tailor Support Chat" onclick="return checkClientAuth('chat with our master tailors');">
+        <i class="fa-solid fa-headset"></i>
+      </a>
+
+      <!-- 5. LANGUAGE SELECTOR ICON -->
+      <button class="icon-btn" id="langBtn" title="Language" onclick="alert('Language selected: English (ZA)')">
+        <i class="fa-solid fa-globe"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- CATEGORY MENU TABS -->
+  <nav class="category-nav">
+    <a href="all.html" class="nav-item">All</a>
+    <a href="women.html" class="nav-item">Women</a>
+    <a href="curve.html" class="nav-item">Curve</a>
+    <a href="kids.html" class="nav-item">Kids</a>
+    <a href="men.html" class="nav-item">Men</a>
+    <a href="traditional.html" class="nav-item">Traditional Attire</a>
+    <a href="petite.html" class="nav-item">Petite</a>
+    <a href="accessories.html" class="nav-item">Accessories</a>
+  </nav>
+
+  <!-- HERO BANNER -->
+  <section class="hero-slider">
+    <div class="slide active">
+      <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1600&q=80" alt="Banner">
+      <div class="hero-content">
+        <h2>BESPOKE AFRICAN &amp; FITTED FASHION</h2>
+        <p>Handcrafted to your exact measurements by master tailors in Johannesburg.</p>
+        <button class="hero-btn" onclick="window.location.href='all.html'">EXPLORE CATALOG</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- DYNAMIC CATEGORY CIRCLES -->
+  <section class="category-circles-section" id="dynamicCategoryCircles">
+    <!-- Populated via JS -->
+  </section>
+
+  <!-- WORKSHOP BANNER -->
+  <div class="workshop-banner-card">
+    <div class="workshop-img-box">
+      <img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=800&q=80" alt="Workshop">
+    </div>
+    <div class="workshop-text-box">
+      <span class="workshop-tag"><i class="fa-solid fa-scissors"></i> Custom Made To Order</span>
+      <h2 class="workshop-heading">Bespoke Tailoring &amp; Custom Craftsmanship</h2>
+      <p class="workshop-desc">At AMK Clothing, every outfit serves as custom design inspiration. We tailor each garment specifically according to your measurements.</p>
+      <a href="client-support.html" class="chat-tailor-btn" onclick="return checkClientAuth('chat with our master tailors');">
+        <i class="fa-solid fa-headset"></i> Message Our Master Tailor
+      </a>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-it-works-section">
+    <div style="font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">How Bespoke Tailoring Works</div>
+    <div style="font-size: 13px; color: #64748b; margin-bottom: 20px;">3 simple steps to get your perfectly fitted custom outfit</div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-icon-wrapper"><i class="fa-solid fa-shirt"></i></div>
+        <h4 style="margin: 0 0 6px 0; font-weight: 800;">1. Choose a Style</h4>
+        <p style="font-size: 13px; color: #64748b; margin: 0;">Browse our catalog or submit your design photos.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-icon-wrapper"><i class="fa-solid fa-ruler-combined"></i></div>
+        <h4 style="margin: 0 0 6px 0; font-weight: 800;">2. Send Measurements</h4>
+        <p style="font-size: 13px; color: #64748b; margin: 0;">Chat with our master tailor online or log your sizing.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-icon-wrapper"><i class="fa-solid fa-box-open"></i></div>
+        <h4 style="margin: 0 0 6px 0; font-weight: 800;">3. Tailored &amp; Delivered</h4>
+        <p style="font-size: 13px; color: #64748b; margin: 0;">We handcraft your garment and deliver to your door.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDIT PROFILE MODAL -->
+  <div id="editProfileModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center;">
+    <div style="background: #ffffff; width: 100%; max-width: 420px; border-radius: 12px; padding: 30px; box-sizing: border-box; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+      <button onclick="closeEditProfileModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 20px; cursor: pointer; color: #64748b;"><i class="fa-solid fa-xmark"></i></button>
+      
+      <h3 style="margin: 0 0 6px 0; font-size: 18px; font-weight: 900; color: #0f172a;">Edit Client Profile</h3>
+      <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">Update your personal details below.</p>
+
+      <form onsubmit="saveProfileChanges(event)">
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 4px; color: #0f172a;">Full Name</label>
+          <input type="text" id="editNameInput" required style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 4px; color: #0f172a;">Email Address</label>
+          <input type="email" id="editEmailInput" required style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 4px; color: #0f172a;">Phone Number</label>
+          <input type="tel" id="editPhoneInput" placeholder="+27 82 000 0000" required style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 4px; color: #0f172a;">Password</label>
+          <input type="password" id="editPasswordInput" required style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; box-sizing: border-box;">
+        </div>
+
+        <button type="submit" style="width: 100%; background-color: #227b75; color: white; border: none; padding: 12px; font-weight: bold; border-radius: 6px; cursor: pointer; font-size: 14px;">
+          Save Profile Changes
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- SITE FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <h4 class="footer-heading">AMK CLOTHING</h4>
+        <p class="footer-desc">
+          Bespoke tailoring and custom fashion crafted to your exact measurements in Johannesburg.
+        </p>
+        <div class="footer-socials">
+          <a href="#" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-heading">Shop Collections</h4>
+        <ul class="footer-links">
+          <li><a href="all.html">All Collections</a></li>
+          <li><a href="women.html">Women's Collection</a></li>
+          <li><a href="petite.html">Petite Collection</a></li>
+          <li><a href="curve.html">Curve &amp; Plus Sizing</a></li>
+          <li><a href="men.html">Men's Suits &amp; Tailoring</a></li>
+          <li><a href="kids.html">Kids' Wear</a></li>
+          <li><a href="traditional.html">Traditional Attire</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-heading">Client Services</h4>
+        <ul class="footer-links">
+          <li><a href="client-support.html" onclick="return checkClientAuth('chat with tailor support');">Tailor Support Chat</a></li>
+          <li><a href="wishlist.html" onclick="return checkClientAuth('view your wishlist');">My Wishlist</a></li>
+          <li><a href="cart.html" onclick="return checkClientAuth('view your shopping cart');">Shopping Cart</a></li>
+          <li><a href="javascript:void(0)" onclick="openEditProfileModal();">Edit Profile</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-heading">Studio Address</h4>
+        <p class="footer-contact-item">
+          <i class="fa-solid fa-location-dot" style="color: #227b75;"></i>
+          Braamfontein, Johannesburg, South Africa
+        </p>
+        <p class="footer-contact-item">
+          <i class="fa-solid fa-envelope" style="color: #227b75;"></i>
+          support@amkclothing.co.za
+        </p>
+        <p class="footer-contact-item">
+          <i class="fa-solid fa-phone" style="color: #227b75;"></i>
+          +27 11 000 0000
+        </p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 AMK Clothing Studio. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      loadDynamicCategories();
+    });
+
+    function loadDynamicCategories() {
+      const container = document.getElementById('dynamicCategoryCircles');
+      let adminProducts = JSON.parse(localStorage.getItem('amk_inventory')) || [];
+
+      const categories = [
+        { name: "Women", page: "women.html", defaultImg: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80" },
+        { name: "Curve", page: "curve.html", defaultImg: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=400&q=80" },
+        { name: "Kids", page: "kids.html", defaultImg: "https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?auto=format&fit=crop&w=400&q=80" },
+        { name: "Men", page: "men.html", defaultImg: "https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=400&q=80" },
+        { name: "Traditional", page: "traditional.html", defaultImg: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=400&q=80" },
+        { name: "Petite", page: "petite.html", defaultImg: "https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?auto=format&fit=crop&w=400&q=80" },
+        { name: "Accessories", page: "accessories.html", defaultImg: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=400&q=80" }
+      ];
+
+      container.innerHTML = "";
+      categories.forEach(cat => {
+        const found = adminProducts.find(p => p.category && p.category.toLowerCase() === cat.name.toLowerCase());
+        const displayImg = (found && found.images && found.images.length > 0) ? found.images[0] : cat.defaultImg;
+
+        container.innerHTML += `
+          <a href="${cat.page}" class="circle-card">
+            <div class="circle-img-wrapper"><img src="${displayImg}" alt="${cat.name}"></div>
+            <span>${cat.name}</span>
+          </a>
+        `;
+      });
+    }
+
+    window.addEventListener('click', function(e) {
+      const btn = document.getElementById('headerAuthBtn');
+      const dropdown = document.getElementById('storefrontProfileDropdown');
+      if (btn && dropdown && !btn.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

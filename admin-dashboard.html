@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMK Clothing - Admin Dashboard &amp; Profile</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background-color: #f8fafc;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #0f172a;
+    }
+
+    /* TOP HEADER BAR */
+    .admin-header {
+      background-color: #000000;
+      color: #ffffff;
+      padding: 16px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-logo {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-storefront-link {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    /* FULL WIDTH CONTAINER */
+    .admin-container {
+      width: 100%;
+      padding: 30px 40px;
+      box-sizing: border-box;
+    }
+
+    /* SIDEBAR & CONTENT GRID */
+    .dashboard-grid-wrapper {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 25px;
+    }
+
+    /* LEFT SIDEBAR PROFILE CARD */
+    .dashboard-sidebar {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 25px 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+      height: fit-content;
+      text-align: center;
+    }
+
+    .profile-avatar-container {
+      width: 80px;
+      height: 80px;
+      background: #f1f5f9;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px auto;
+      font-size: 32px;
+      color: #475569;
+      border: 2px solid #e2e8f0;
+    }
+
+    .sidebar-admin-name {
+      font-size: 18px;
+      font-weight: 900;
+      margin: 0 0 4px 0;
+      color: #0f172a;
+    }
+
+    .sidebar-admin-role {
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 25px;
+      font-weight: 600;
+    }
+
+    .sidebar-nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: left;
+    }
+
+    .sidebar-nav-btn {
+      width: 100%;
+      background: #ffffff;
+      color: #0f172a;
+      border: 1px solid #e2e8f0;
+      padding: 11px 14px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      box-sizing: border-box;
+    }
+
+    .sidebar-nav-btn:hover {
+      background-color: #f1f5f9;
+    }
+
+    .sidebar-nav-btn.active {
+      background-color: #227b75;
+      color: #ffffff;
+      border-color: #227b75;
+    }
+
+    .sidebar-divider {
+      border-top: 1px solid #e2e8f0;
+      margin: 18px 0;
+    }
+
+    .logout-sidebar-btn {
+      color: #e74c3c;
+      background: #fef2f2;
+      border-color: #fecaca;
+    }
+
+    .logout-sidebar-btn:hover {
+      background: #fee2e2;
+    }
+
+    /* RIGHT MAIN CONTENT CARDS */
+    .dashboard-content-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+      box-sizing: border-box;
+    }
+
+    .content-panel {
+      display: none;
+    }
+
+    .content-panel.active {
+      display: block;
+    }
+
+    .panel-title h2 {
+      font-size: 22px;
+      font-weight: 900;
+      margin: 0 0 6px 0;
+    }
+
+    .panel-title p {
+      font-size: 13px;
+      color: #64748b;
+      margin: 0 0 25px 0;
+    }
+
+    /* FORM STYLING */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 14px;
+      box-sizing: border-box;
+      outline: none;
+    }
+
+    .form-control:focus {
+      border-color: #227b75;
+    }
+
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-row-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 15px;
+    }
+
+    .submit-btn {
+      background-color: #227b75;
+      color: #ffffff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .submit-btn:hover {
+      background-color: #1a5e59;
+    }
+
+    /* DATA TABLE */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin-top: 15px;
+    }
+
+    .data-table th {
+      background: #f8fafc;
+      color: #475569;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .data-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header class="admin-header">
+    <div class="admin-logo">
+      <i class="fa-solid fa-scissors" style="color: #227b75;"></i> AMK CLOTHING
+    </div>
+    <a href="admin-home.html" class="header-storefront-link">Back to Dashboard Hub</a>
+  </header>
+
+  <!-- FULL WIDTH CONTAINER -->
+  <div class="admin-container">
+    <div class="dashboard-grid-wrapper">
+
+      <!-- LEFT SIDEBAR PROFILE -->
+      <div class="dashboard-sidebar">
+        <div class="profile-avatar-container">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <h3 class="sidebar-admin-name">Latecia Ratshiedana</h3>
+        <p class="sidebar-admin-role">System Administrator</p>
+
+        <ul class="sidebar-nav-list">
+          <li>
+            <button class="sidebar-nav-btn active" id="btnTabProfile" onclick="switchDashboardTab('panelEditProfile', 'btnTabProfile')">
+              <i class="fa-solid fa-user-gear"></i> Edit Profile
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-nav-btn" id="btnTabStaff" onclick="switchDashboardTab('panelAddStaff', 'btnTabStaff')">
+              <i class="fa-solid fa-user-plus"></i> Add Staff Account
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-nav-btn" id="btnTabStudio" onclick="switchDashboardTab('panelStudioSettings', 'btnTabStudio')">
+              <i class="fa-solid fa-store"></i> Studio &amp; Footer Settings
+            </button>
+          </li>
+        </ul>
+
+        <div class="sidebar-divider"></div>
+
+        <a href="admin-login.html" class="sidebar-nav-btn logout-sidebar-btn">
+          <i class="fa-solid fa-right-from-bracket"></i> Log Out
+        </a>
+      </div>
+
+      <!-- RIGHT CONTENT PANEL -->
+      <div class="dashboard-content-card">
+
+        <!-- PANEL 1: EDIT ADMIN PROFILE -->
+        <div class="content-panel active" id="panelEditProfile">
+          <div class="panel-title">
+            <h2>Edit Admin Profile</h2>
+            <p>Update your administrator account details and password login credentials.</p>
+          </div>
+
+          <form onsubmit="handleSaveProfile(event)">
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>Admin Full Name</label>
+                <input type="text" class="form-control" id="adminName" value="Latecia Ratshiedana" required>
+              </div>
+              <div class="form-group">
+                <label>Admin Login Email</label>
+                <input type="email" class="form-control" id="adminEmail" value="admin@amkclothing.co.za" required>
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>New Password</label>
+                <input type="password" class="form-control" placeholder="••••••••">
+              </div>
+              <div class="form-group">
+                <label>Confirm Password</label>
+                <input type="password" class="form-control" placeholder="••••••••">
+              </div>
+            </div>
+
+            <button type="submit" class="submit-btn"><i class="fa-solid fa-floppy-disk"></i> Save Profile Details</button>
+          </form>
+        </div>
+
+        <!-- PANEL 2: ADD STAFF ACCOUNT -->
+        <div class="content-panel" id="panelAddStaff">
+          <div class="panel-title">
+            <h2>Add Staff / Worker Account</h2>
+            <p>Create new staff accounts and assign their role for portal access.</p>
+          </div>
+
+          <form onsubmit="handleSaveStaff(event)" style="margin-bottom: 30px;">
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>Staff Full Name</label>
+                <input type="text" class="form-control" id="staffName" placeholder="e.g. John Doe" required>
+              </div>
+              <div class="form-group">
+                <label>Staff Email</label>
+                <input type="email" class="form-control" id="staffEmail" placeholder="e.g. john@amkclothing.com" required>
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>Temporary Password</label>
+                <input type="password" class="form-control" required placeholder="••••••••">
+              </div>
+              <div class="form-group">
+                <label>Assign Role</label>
+                <select class="form-control" id="staffRole">
+                  <option value="Manager">Manager</option>
+                  <option value="Tailor / Worker">Tailor / Worker</option>
+                  <option value="Cashier">Cashier</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" class="submit-btn"><i class="fa-solid fa-user-plus"></i> Create Staff Account</button>
+          </form>
+
+          <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 10px;">Active Staff Accounts</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="staffTableBody">
+              <tr>
+                <td><strong>Sipho Nkosi</strong></td>
+                <td>sipho@amkclothing.com</td>
+                <td>Manager</td>
+                <td><span style="color: #e74c3c; font-weight: 700; cursor: pointer;">Delete</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- PANEL 3: STUDIO & FOOTER SETTINGS (WITH SOCIAL MEDIA LINKS) -->
+        <div class="content-panel" id="panelStudioSettings">
+          <div class="panel-title">
+            <h2>Studio &amp; Footer Settings</h2>
+            <p>Configure studio location details, contact numbers, and storefront social media links.</p>
+          </div>
+
+          <form onsubmit="handleSaveStudio(event)">
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>Studio Name</label>
+                <input type="text" class="form-control" id="settingStudioName" value="AMK Clothing Studio">
+              </div>
+              <div class="form-group">
+                <label>Studio Contact Phone</label>
+                <input type="text" class="form-control" id="settingStudioPhone" value="+27 11 000 0000">
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>Studio Email Address</label>
+                <input type="email" class="form-control" id="settingStudioEmail" value="support@amkclothing.co.za">
+              </div>
+              <div class="form-group">
+                <label>Physical Studio Address (Johannesburg)</label>
+                <input type="text" class="form-control" id="settingStudioAddress" value="Braamfontein, Johannesburg, South Africa">
+              </div>
+            </div>
+
+            <!-- SOCIAL MEDIA LINKS EDIT SECTION -->
+            <h3 style="font-size:15px; font-weight:800; margin:20px 0 12px 0; color:#227b75; border-bottom:1px solid #e2e8f0; padding-bottom:6px;">
+              <i class="fa-solid fa-share-nodes"></i> Storefront Footer Social Media Links
+            </h3>
+
+            <div class="form-row-3">
+              <div class="form-group">
+                <label><i class="fa-brands fa-facebook" style="color:#1877f2;"></i> Facebook Page URL</label>
+                <input type="text" class="form-control" id="linkFacebook" placeholder="https://facebook.com/amkclothing" value="https://facebook.com/amkclothing">
+              </div>
+              <div class="form-group">
+                <label><i class="fa-brands fa-instagram" style="color:#e4405f;"></i> Instagram Profile URL</label>
+                <input type="text" class="form-control" id="linkInstagram" placeholder="https://instagram.com/amkclothing" value="https://instagram.com/amkclothing">
+              </div>
+              <div class="form-group">
+                <label><i class="fa-brands fa-whatsapp" style="color:#25d366;"></i> WhatsApp Link / Number</label>
+                <input type="text" class="form-control" id="linkWhatsapp" placeholder="https://wa.me/27110000000" value="https://wa.me/27110000000">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Footer Copyright &amp; Notice</label>
+              <input type="text" class="form-control" id="settingFooterNotice" value="© 2026 AMK Clothing. All rights reserved. Bespoke Tailoring Management.">
+            </div>
+
+            <button type="submit" class="submit-btn"><i class="fa-solid fa-check"></i> Save Studio &amp; Social Settings</button>
+          </form>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function switchDashboardTab(panelId, btnId) {
+      document.querySelectorAll('.content-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.sidebar-nav-btn').forEach(b => {
+        if (!b.classList.contains('logout-sidebar-btn')) b.classList.remove('active');
+      });
+
+      document.getElementById(panelId).classList.add('active');
+      document.getElementById(btnId).classList.add('active');
+    }
+
+    function loadStudioSettings() {
+      const savedSettings = JSON.parse(localStorage.getItem('amk_studio_settings'));
+      if (savedSettings) {
+        if (savedSettings.name) document.getElementById('settingStudioName').value = savedSettings.name;
+        if (savedSettings.phone) document.getElementById('settingStudioPhone').value = savedSettings.phone;
+        if (savedSettings.email) document.getElementById('settingStudioEmail').value = savedSettings.email;
+        if (savedSettings.address) document.getElementById('settingStudioAddress').value = savedSettings.address;
+        if (savedSettings.facebook) document.getElementById('linkFacebook').value = savedSettings.facebook;
+        if (savedSettings.instagram) document.getElementById('linkInstagram').value = savedSettings.instagram;
+        if (savedSettings.whatsapp) document.getElementById('linkWhatsapp').value = savedSettings.whatsapp;
+        if (savedSettings.notice) document.getElementById('settingFooterNotice').value = savedSettings.notice;
+      }
+    }
+
+    function handleSaveProfile(e) {
+      e.preventDefault();
+      alert("Admin profile details updated successfully!");
+    }
+
+    function handleSaveStaff(e) {
+      e.preventDefault();
+      const name = document.getElementById('staffName').value;
+      const email = document.getElementById('staffEmail').value;
+      const role = document.getElementById('staffRole').value;
+
+      const tbody = document.getElementById('staffTableBody');
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${name}</strong></td>
+        <td>${email}</td>
+        <td>${role}</td>
+        <td><span style="color: #e74c3c; font-weight: 700; cursor: pointer;">Delete</span></td>
+      `;
+      tbody.appendChild(tr);
+
+      alert(`Staff account for ${name} created successfully!`);
+      document.getElementById('staffName').value = '';
+      document.getElementById('staffEmail').value = '';
+    }
+
+    function handleSaveStudio(e) {
+      e.preventDefault();
+      
+      const settings = {
+        name: document.getElementById('settingStudioName').value,
+        phone: document.getElementById('settingStudioPhone').value,
+        email: document.getElementById('settingStudioEmail').value,
+        address: document.getElementById('settingStudioAddress').value,
+        facebook: document.getElementById('linkFacebook').value,
+        instagram: document.getElementById('linkInstagram').value,
+        whatsapp: document.getElementById('linkWhatsapp').value,
+        notice: document.getElementById('settingFooterNotice').value
+      };
+
+      localStorage.setItem('amk_studio_settings', JSON.stringify(settings));
+      alert("Studio details and social media links saved to system storage!");
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadStudioSettings();
+      const urlParams = new URLSearchParams(window.location.search);
+      const tab = urlParams.get('tab');
+      if (tab === 'edit-profile') {
+        switchDashboardTab('panelEditProfile', 'btnTabProfile');
+      }
+    });
+  </script>
+</body>
+</html>

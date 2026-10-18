@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMK Clothing - Wishlist</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .wishlist-container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .wishlist-title {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+
+    .wishlist-tabs {
+      border-bottom: 1px solid #e2e8f0;
+      margin-bottom: 24px;
+    }
+
+    .wishlist-tab-item {
+      font-size: 16px;
+      font-weight: 800;
+      color: #000000;
+      border-bottom: 3px solid #000000;
+      padding-bottom: 8px;
+      display: inline-block;
+    }
+
+    .wishlist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .wishlist-card {
+      border: 1px solid #f0f0f0;
+      border-radius: 6px;
+      padding: 12px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .wishlist-card img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+
+    .remove-wish-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .move-cart-btn {
+      width: 100%;
+      background-color: #000000;
+      color: #ffffff;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header class="header">
+    <div class="logo">AMK CLOTHING</div>
+    
+    <div class="nav-icons">
+      <a href="index.html" class="icon-btn" title="Continue Shopping" style="font-size: 14px; text-decoration: none; color: #fff;">
+        ← Back to Shop
+      </a>
+      <a href="cart.html" class="icon-btn" title="Cart">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span class="badge" id="cartBadge">2</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="wishlist-container">
+    
+    <!-- MY WISHLIST HEADER (Picture 3) -->
+    <h1 class="wishlist-title">MY WISHLIST</h1>
+
+    <!-- ITEMS COUNT TAB (Picture 4) -->
+    <div class="wishlist-tabs">
+      <div class="wishlist-tab-item">
+        Items (<span id="wishCount">3</span>)
+      </div>
+    </div>
+
+    <!-- WISHLIST PRODUCTS GRID -->
+    <div class="wishlist-grid" id="wishlistGrid">
+      
+      <div class="wishlist-card">
+        <button class="remove-wish-btn" onclick="removeWishItem(this)"><i class="fa-solid fa-xmark"></i></button>
+        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80" alt="Tropical Print Maxi Dress">
+        <div>
+          <div class="product-title">Tropical Print Maxi Dress</div>
+          <div class="product-price">R350</div>
+        </div>
+        <button class="move-cart-btn" onclick="alert('Moved item to Cart!')">Move to Cart</button>
+      </div>
+
+      <div class="wishlist-card">
+        <button class="remove-wish-btn" onclick="removeWishItem(this)"><i class="fa-solid fa-xmark"></i></button>
+        <img src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=400&q=80" alt="Traditional Print Modern Attire">
+        <div>
+          <div class="product-title">Traditional Print Modern Attire</div>
+          <div class="product-price">R550</div>
+        </div>
+        <button class="move-cart-btn" onclick="alert('Moved item to Cart!')">Move to Cart</button>
+      </div>
+
+      <div class="wishlist-card">
+        <button class="remove-wish-btn" onclick="removeWishItem(this)"><i class="fa-solid fa-xmark"></i></button>
+        <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=400&q=80" alt="Luxury Jewelry Set">
+        <div>
+          <div class="product-title">Luxury Jewelry Set</div>
+          <div class="product-price">R180</div>
+        </div>
+        <button class="move-cart-btn" onclick="alert('Moved item to Cart!')">Move to Cart</button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function removeWishItem(btn) {
+      btn.closest('.wishlist-card').remove();
+      const countSpan = document.getElementById('wishCount');
+      let currentCount = parseInt(countSpan.textContent) - 1;
+      if (currentCount < 0) currentCount = 0;
+      countSpan.textContent = currentCount;
+    }
+  </script>
+</body>
+</html>

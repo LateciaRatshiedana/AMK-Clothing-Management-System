@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMK Clothing - Client Communication &amp; Messages</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background-color: #f8fafc;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #0f172a;
+    }
+
+    .admin-header {
+      background-color: #000000;
+      color: #ffffff;
+      padding: 16px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-logo {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-storefront-link {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .admin-container {
+      width: 100%;
+      padding: 30px 40px;
+      box-sizing: border-box;
+    }
+
+    .page-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .page-title h2 {
+      font-size: 26px;
+      font-weight: 900;
+      margin: 0 0 4px 0;
+    }
+
+    .page-title p {
+      font-size: 13px;
+      color: #64748b;
+      margin: 0;
+    }
+
+    .chat-layout-grid {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 25px;
+      height: 650px;
+    }
+
+    .inbox-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .inbox-header {
+      padding: 16px 20px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      font-weight: 800;
+      font-size: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .client-chat-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .chat-item {
+      padding: 16px 20px;
+      border-bottom: 1px solid #f1f5f9;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .chat-item:hover, .chat-item.active {
+      background-color: #f1f5f9;
+    }
+
+    .client-avatar {
+      width: 42px;
+      height: 42px;
+      background-color: #227b75;
+      color: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .chat-meta {
+      overflow: hidden;
+      flex: 1;
+    }
+
+    .client-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 2px 0;
+    }
+
+    .preview-msg {
+      font-size: 12px;
+      color: #64748b;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chat-window-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      padding: 16px 24px;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .active-client-info h3 {
+      font-size: 16px;
+      font-weight: 900;
+      margin: 0 0 2px 0;
+    }
+
+    .active-client-info p {
+      font-size: 12px;
+      color: #64748b;
+      margin: 0;
+    }
+
+    .messages-container {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .message-bubble {
+      max-width: 65%;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .msg-client {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      align-self: flex-start;
+      color: #0f172a;
+    }
+
+    .msg-admin {
+      background: #227b75;
+      color: #ffffff;
+      align-self: flex-end;
+    }
+
+    .msg-timestamp {
+      font-size: 10px;
+      opacity: 0.7;
+      margin-top: 4px;
+      text-align: right;
+    }
+
+    .chat-input-row {
+      padding: 16px 24px;
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      gap: 12px;
+    }
+
+    .chat-input-row input {
+      flex: 1;
+      padding: 11px 16px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .chat-input-row input:focus {
+      border-color: #227b75;
+    }
+
+    .send-msg-btn {
+      background-color: #227b75;
+      color: #ffffff;
+      border: none;
+      padding: 11px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .send-msg-btn:hover {
+      background-color: #1a5e59;
+    }
+
+    /* MODAL STYLES */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 3000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      width: 100%;
+      max-width: 450px;
+      border-radius: 10px;
+      padding: 25px;
+      box-sizing: border-box;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px; right: 20px;
+      background: none; border: none;
+      font-size: 20px; cursor: pointer; color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header class="admin-header">
+    <div class="admin-logo">
+      <i class="fa-solid fa-scissors" style="color: #227b75;"></i> AMK CLOTHING
+    </div>
+    <a href="admin-home.html" class="header-storefront-link">Back to Dashboard Hub</a>
+  </header>
+
+  <!-- FULL WIDTH CONTAINER -->
+  <div class="admin-container">
+
+    <div class="page-header-row">
+      <div class="page-title">
+        <h2>Client Communication &amp; Messages</h2>
+        <p>Respond to customer fitting inquiries, send tailoring updates, and manage client messages</p>
+      </div>
+    </div>
+
+    <!-- MESSAGING CHAT LAYOUT -->
+    <div class="chat-layout-grid">
+
+      <!-- INBOX CLIENT LIST -->
+      <div class="inbox-card">
+        <div class="inbox-header">
+          <span>Client Conversations</span>
+          <i class="fa-solid fa-comments" style="color: #227b75;"></i>
+        </div>
+        <ul class="client-chat-list">
+          <li class="chat-item active" onclick="switchConversation('Latecia Ratshiedana', '#AMK-8891', 'Orange Satin Evening Dress')">
+            <div class="client-avatar">LR</div>
+            <div class="chat-meta">
+              <h4 class="client-name">Latecia Ratshiedana</h4>
+              <p class="preview-msg">Is my Orange Satin dress ready for fitting?</p>
+            </div>
+          </li>
+          <li class="chat-item" onclick="switchConversation('Sarah Dlamini', '#AMK-8894', 'Custom Tailored Navy Suit')">
+            <div class="client-avatar" style="background:#0f172a;">SD</div>
+            <div class="chat-meta">
+              <h4 class="client-name">Sarah Dlamini</h4>
+              <p class="preview-msg">I sent the proof of deposit transfer!</p>
+            </div>
+          </li>
+          <li class="chat-item" onclick="switchConversation('Sipho Khumalo', '#AMK-8895', 'Shweshwe Print Attire')">
+            <div class="client-avatar" style="background:#475569;">SK</div>
+            <div class="chat-meta">
+              <h4 class="client-name">Sipho Khumalo</h4>
+              <p class="preview-msg">Thanks! I will visit the Johannesburg studio on Friday.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ACTIVE CHAT DISPLAY WINDOW -->
+      <div class="chat-window-card">
+        <div class="chat-header">
+          <div class="active-client-info">
+            <h3 id="chatClientName">Latecia Ratshiedana</h3>
+            <p id="chatOrderRef">Order Ref: #AMK-8891 (Orange Satin Evening Dress)</p>
+          </div>
+          <button class="send-msg-btn" style="background: #0f172a;" onclick="openFittingModal()">
+            <i class="fa-solid fa-calendar-check"></i> Book Fitting Alert
+          </button>
+        </div>
+
+        <div class="messages-container" id="messagesBody">
+          <div class="message-bubble msg-client">
+            Hi AMK Studio! I wanted to check if my Orange Satin Evening Dress is in production yet?
+            <div class="msg-timestamp">10:14 AM</div>
+          </div>
+          <div class="message-bubble msg-admin">
+            Hello Latecia! Yes, your dress is currently in cutting &amp; stitching. We are finalizing the bust and waist tailoring!
+            <div class="msg-timestamp">10:20 AM</div>
+          </div>
+          <div class="message-bubble msg-client">
+            Awesome! When can I come in to the Johannesburg studio for my first fitting?
+            <div class="msg-timestamp">10:25 AM</div>
+          </div>
+        </div>
+
+        <form class="chat-input-row" onsubmit="handleSendMessage(event)">
+          <input type="text" id="adminMsgInput" placeholder="Type your message or tailoring update..." required>
+          <button type="submit" class="send-msg-btn">
+            <i class="fa-solid fa-paper-plane"></i> Send Reply
+          </button>
+        </form>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- BOOK FITTING MODAL -->
+  <div class="modal-overlay" id="fittingModal">
+    <div class="modal-box">
+      <button class="close-btn" onclick="closeFittingModal()">&times;</button>
+      <h3 style="margin-top:0; font-size:18px; font-weight:900;">Send Fitting Invitation</h3>
+      <form onsubmit="handleConfirmFitting(event)">
+        <div style="margin-bottom:12px; background:#f8fafc; padding:12px; border-radius:6px; border:1px solid #e2e8f0;">
+          <p style="margin:0 0 4px 0; font-size:13px;"><strong>Client:</strong> <span id="modalClientName">Latecia Ratshiedana</span></p>
+          <p style="margin:0; font-size:12px; color:#64748b;"><strong>Order Reference:</strong> <span id="modalOrderRef">#AMK-8891</span></p>
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:bold;">Fitting Date</label>
+          <input type="date" id="fittingDate" required style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box;">
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <label style="font-size:12px; font-weight:bold;">Fitting Time Slot</label>
+          <input type="time" id="fittingTime" required style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box;">
+        </div>
+
+        <button type="submit" class="send-msg-btn" style="width:100%; justify-content:center;">
+          Send SMS / Email Alert
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let currentClient = "Latecia Ratshiedana";
+    let currentRef = "#AMK-8891";
+
+    function switchConversation(name, ref, item) {
+      currentClient = name;
+      currentRef = ref;
+
+      document.getElementById('chatClientName').textContent = name;
+      document.getElementById('chatOrderRef').textContent = `Order Ref: ${ref} (${item})`;
+      
+      const container = document.getElementById('messagesBody');
+      container.innerHTML = `
+        <div class="message-bubble msg-client">
+          Hi AMK Admin, updating you on order ${ref}.
+          <div class="msg-timestamp">09:30 AM</div>
+        </div>
+        <div class="message-bubble msg-admin">
+          Hello ${name}! We have received your order details and are preparing your bespoke garments.
+          <div class="msg-timestamp">09:35 AM</div>
+        </div>
+      `;
+
+      document.querySelectorAll('.chat-item').forEach(i => i.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+    }
+
+    function openFittingModal() {
+      document.getElementById('modalClientName').textContent = currentClient;
+      document.getElementById('modalOrderRef').textContent = currentRef;
+      document.getElementById('fittingModal').style.display = 'flex';
+    }
+
+    function closeFittingModal() {
+      document.getElementById('fittingModal').style.display = 'none';
+    }
+
+    function handleConfirmFitting(e) {
+      e.preventDefault();
+      const date = document.getElementById('fittingDate').value;
+      const time = document.getElementById('fittingTime').value;
+
+      const container = document.getElementById('messagesBody');
+      const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      const alertMsg = document.createElement('div');
+      alertMsg.className = 'message-bubble msg-admin';
+      alertMsg.style.background = '#0f172a';
+      alertMsg.innerHTML = `
+        <strong>📅 Fitting Appointment Booked!</strong><br>
+        We have scheduled your fitting for <strong>${date} at ${time}</strong> at our Johannesburg Studio. An alert has been sent to your email.
+        <div class="msg-timestamp">${now}</div>
+      `;
+      container.appendChild(alertMsg);
+
+      alert(`Fitting alert sent to ${currentClient} for order ${currentRef}!`);
+      closeFittingModal();
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function handleSendMessage(e) {
+      e.preventDefault();
+      const input = document.getElementById('adminMsgInput');
+      const text = input.value.trim();
+
+      if (text !== '') {
+        const container = document.getElementById('messagesBody');
+        const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'message-bubble msg-admin';
+        msgDiv.innerHTML = `
+          ${text}
+          <div class="msg-timestamp">${now}</div>
+        `;
+        container.appendChild(msgDiv);
+
+        input.value = '';
+        container.scrollTop = container.scrollHeight;
+      }
+    }
+  </script>
+</body>
+</html>

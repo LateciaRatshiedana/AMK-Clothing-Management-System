@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMK Clothing - Inventory Management</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background-color: #f8fafc;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #0f172a;
+    }
+
+    .admin-header {
+      background-color: #000000;
+      color: #ffffff;
+      padding: 16px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-logo {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-storefront-link {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .admin-container {
+      width: 100%;
+      padding: 30px 40px;
+      box-sizing: border-box;
+    }
+
+    .page-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .page-title h2 {
+      font-size: 26px;
+      font-weight: 900;
+      margin: 0 0 4px 0;
+    }
+
+    .page-title p {
+      font-size: 13px;
+      color: #64748b;
+      margin: 0;
+    }
+
+    .add-garment-btn {
+      background-color: #227b75;
+      color: #ffffff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.2s;
+    }
+
+    .add-garment-btn:hover {
+      background-color: #1a5e59;
+    }
+
+    .table-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+      overflow: hidden;
+    }
+
+    .table-card-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid #e2e8f0;
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .inventory-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .inventory-table th {
+      background: #f8fafc;
+      color: #475569;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      padding: 14px 24px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .inventory-table td {
+      padding: 16px 24px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #0f172a;
+      vertical-align: middle;
+    }
+
+    .inventory-table tr:hover {
+      background-color: #f8fafc;
+    }
+
+    .product-img-thumb {
+      width: 50px;
+      height: 50px;
+      border-radius: 6px;
+      object-fit: cover;
+      border: 1px solid #e2e8f0;
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .badge-in-stock { background: #dcfce7; color: #166534; }
+    .badge-out-stock { background: #fee2e2; color: #991b1b; }
+
+    .action-btn {
+      font-weight: 700;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      margin-right: 8px;
+    }
+
+    .edit-price-btn { color: #0f172a; background: #e2e8f0; padding: 4px 8px; border-radius: 4px; }
+    .toggle-stock-btn { color: #075985; background: #e0f2fe; padding: 4px 8px; border-radius: 4px; }
+    .delete-btn { color: #e74c3c; }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 3000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      width: 100%;
+      max-width: 550px;
+      border-radius: 10px;
+      padding: 25px;
+      box-sizing: border-box;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px; right: 20px;
+      background: none; border: none;
+      font-size: 20px; cursor: pointer; color: #64748b;
+    }
+
+    .add-extra-btn {
+      background: #f1f5f9;
+      color: #227b75;
+      border: 1px dashed #227b75;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 5px;
+      display: inline-block;
+    }
+
+    .measurement-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header class="admin-header">
+    <div class="admin-logo">
+      <i class="fa-solid fa-scissors" style="color: #227b75;"></i> AMK CLOTHING
+    </div>
+    <a href="admin-home.html" class="header-storefront-link">&larr; Back to Dashboard Hub</a>
+  </header>
+
+  <!-- FULL WIDTH CONTAINER -->
+  <div class="admin-container">
+
+    <div class="page-header-row">
+      <div class="page-title">
+        <h2>Inventory Management</h2>
+        <p>Add new clothing items, manage stock pricing, and record custom garments</p>
+      </div>
+      <button class="add-garment-btn" onclick="openAddModal()">
+        <i class="fa-solid fa-plus"></i> Add New Item
+      </button>
+    </div>
+
+    <div class="table-card">
+      <div class="table-card-header">Current Recorded Inventory</div>
+      <table class="inventory-table">
+        <thead>
+          <tr>
+            <th>Main Image</th>
+            <th>Item Title</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Availability</th>
+            <th>Views</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="inventoryTableBody">
+          <!-- Dynamic entries rendered from localStorage -->
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- ADD ITEM MODAL -->
+  <div class="modal-overlay" id="addItemModal">
+    <div class="modal-box">
+      <button class="close-btn" onclick="closeModal('addItemModal')">&times;</button>
+      <h3 style="margin-top:0; font-size:18px; font-weight:900;">Record &amp; Publish New Garment</h3>
+      <form onsubmit="handleSaveGarment(event)">
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:bold;">Garment Title</label>
+          <input type="text" id="invTitle" required style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:bold;">Category</label>
+          <select id="invCategory" style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box;">
+            <option value="Women">Women</option>
+            <option value="Curve">Curve</option>
+            <option value="Petite">Petite</option>
+            <option value="Men">Men</option>
+            <option value="Kids">Kids</option>
+            <option value="Traditional">Traditional Attire</option>
+          </select>
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:bold;">Price (e.g. R 1,850.00)</label>
+          <input type="text" id="invPrice" required style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box;">
+        </div>
+        
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:bold;">Available Sizes (Comma Separated)</label>
+          <input type="text" id="invSizes" placeholder="S, M, L, XL, Custom Fit" required style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box;">
+          
+          <button type="button" class="add-extra-btn" onclick="toggleMeasurementFields()">+ Add Specific Sizing (Bust, Waist, Hips)</button>
+
+          <div class="measurement-grid" id="measurementFields" style="display: none;">
+            <div>
+              <label style="font-size:11px; font-weight:bold;">Bust / Chest (cm)</label>
+              <input type="text" id="mBust" placeholder="e.g. 92cm" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:4px; box-sizing:border-box;">
+            </div>
+            <div>
+              <label style="font-size:11px; font-weight:bold;">Waist (cm)</label>
+              <input type="text" id="mWaist" placeholder="e.g. 74cm" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:4px; box-sizing:border-box;">
+            </div>
+            <div>
+              <label style="font-size:11px; font-weight:bold;">Hips (cm)</label>
+              <input type="text" id="mHips" placeholder="e.g. 100cm" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:4px; box-sizing:border-box;">
+            </div>
+            <div>
+              <label style="font-size:11px; font-weight:bold;">Length (cm)</label>
+              <input type="text" id="mLength" placeholder="e.g. 140cm" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:4px; box-sizing:border-box;">
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <label style="font-size:12px; font-weight:bold;">Image Paths / Multi-Angle Views (Up to 7)</label>
+          <p style="font-size:11px; color:#64748b; margin:2px 0 8px 0;">Leave blank to publish without images, or add view angles.</p>
+          
+          <div id="imageInputsContainer">
+            <input type="text" class="inv-img-field" placeholder="Angle 1 (Main View) - e.g. Images/Outfit_Pics/dress1.jpg" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; margin-bottom:6px;">
+          </div>
+
+          <button type="button" class="add-extra-btn" onclick="addExtraAngleField()">+ Add Another Angle View</button>
+        </div>
+
+        <button type="submit" style="width:100%; background:#227b75; color:white; border:none; padding:11px; border-radius:6px; font-weight:bold; cursor:pointer;">
+          Record &amp; Publish Garment
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- EDIT PRICE MODAL -->
+  <div class="modal-overlay" id="editPriceModal">
+    <div class="modal-box" style="max-width: 400px;">
+      <button class="close-btn" onclick="closeModal('editPriceModal')">&times;</button>
+      <h3 style="margin-top:0; font-size:18px; font-weight:900;">Update Item Price</h3>
+      <form onsubmit="handleUpdatePrice(event)">
+        <input type="hidden" id="editItemIndex">
+        <div style="margin-bottom:15px;">
+          <label style="font-size:12px; font-weight:bold;" id="editItemTitleLabel"></label>
+        </div>
+        <div style="margin-bottom:20px;">
+          <label style="font-size:12px; font-weight:bold;">New Price (e.g. R 1,950.00)</label>
+          <input type="text" id="newPriceInput" required style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box;">
+        </div>
+        <button type="submit" style="width:100%; background:#227b75; color:white; border:none; padding:11px; border-radius:6px; font-weight:bold; cursor:pointer;">
+          Save New Price
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let currentAngleCount = 1;
+
+    const defaultItems = [
+      { id: 1, title: 'Signature Curve Tailored Evening Gown', category: 'Curve', price: 'R 1,850.00', inStock: true, images: ['Images/Outfit_Pics/WomanCurvedress.jpg'] },
+      { id: 2, title: 'Signature Petite Tailored Evening Dress', category: 'Petite', price: 'R 1,650.00', inStock: true, images: ['Images/Outfit_Pics/WomanPetitedress.jpg'] }
+    ];
+
+    function openAddModal() {
+      document.getElementById('addItemModal').style.display = 'flex';
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+    }
+
+    function toggleMeasurementFields() {
+      const fields = document.getElementById('measurementFields');
+      fields.style.display = (fields.style.display === 'none' || fields.style.display === '') ? 'grid' : 'none';
+    }
+
+    function addExtraAngleField() {
+      if (currentAngleCount >= 7) {
+        alert("Maximum limit of 7 angle views reached.");
+        return;
+      }
+      currentAngleCount++;
+      const container = document.getElementById('imageInputsContainer');
+      const newInput = document.createElement('input');
+      newInput.type = 'text';
+      newInput.className = 'inv-img-field';
+      newInput.placeholder = `Angle ${currentAngleCount} View Path...`;
+      newInput.style.cssText = 'width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; margin-bottom:6px;';
+      container.appendChild(newInput);
+    }
+
+    function loadInventory() {
+      let items = JSON.parse(localStorage.getItem('amk_inventory'));
+      if (!items) {
+        items = defaultItems;
+        localStorage.setItem('amk_inventory', JSON.stringify(items));
+      }
+
+      const tbody = document.getElementById('inventoryTableBody');
+      tbody.innerHTML = '';
+
+      items.forEach((item, index) => {
+        const mainImg = (item.images && item.images.length > 0) ? item.images[0] : 'https://via.placeholder.com/50?text=AMK';
+        const viewsText = (item.images && item.images.length > 0) ? `${item.images.length} Views` : 'No Image';
+        
+        const isAvailable = item.inStock !== false;
+        const stockBadge = isAvailable 
+          ? `<span class="status-pill badge-in-stock">In Stock</span>`
+          : `<span class="status-pill badge-out-stock">Out of Stock</span>`;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><img src="${mainImg}" class="product-img-thumb" alt="Garment" onerror="this.src='https://via.placeholder.com/50?text=AMK'"></td>
+          <td><strong>${item.title}</strong></td>
+          <td>${item.category}</td>
+          <td>${item.price}</td>
+          <td>${stockBadge}</td>
+          <td><span style="background:#f1f5f9; color:#475569; font-weight:bold; padding:3px 8px; border-radius:12px; font-size:12px;">${viewsText}</span></td>
+          <td>
+            <button class="action-btn edit-price-btn" onclick="openEditPrice(${index})">Edit Price</button>
+            <button class="action-btn toggle-stock-btn" onclick="toggleStockStatus(${index})">Toggle Stock</button>
+            <button class="action-btn delete-btn" onclick="deleteGarment(${index})">Remove</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function openEditPrice(index) {
+      let items = JSON.parse(localStorage.getItem('amk_inventory')) || [];
+      const item = items[index];
+      if (item) {
+        document.getElementById('editItemIndex').value = index;
+        document.getElementById('editItemTitleLabel').textContent = `Garment: ${item.title}`;
+        document.getElementById('newPriceInput').value = item.price;
+        document.getElementById('editPriceModal').style.display = 'flex';
+      }
+    }
+
+    function handleUpdatePrice(e) {
+      e.preventDefault();
+      const index = document.getElementById('editItemIndex').value;
+      const newPrice = document.getElementById('newPriceInput').value;
+
+      let items = JSON.parse(localStorage.getItem('amk_inventory')) || [];
+      if (items[index]) {
+        items[index].price = newPrice;
+        localStorage.setItem('amk_inventory', JSON.stringify(items));
+        alert("Item price updated successfully!");
+        closeModal('editPriceModal');
+        loadInventory();
+      }
+    }
+
+    function toggleStockStatus(index) {
+      let items = JSON.parse(localStorage.getItem('amk_inventory')) || [];
+      if (items[index]) {
+        items[index].inStock = items[index].inStock === false ? true : false;
+        localStorage.setItem('amk_inventory', JSON.stringify(items));
+        loadInventory();
+      }
+    }
+
+    function handleSaveGarment(e) {
+      e.preventDefault();
+      const title = document.getElementById('invTitle').value;
+      const category = document.getElementById('invCategory').value;
+      const price = document.getElementById('invPrice').value;
+
+      const imgInputs = document.querySelectorAll('.inv-img-field');
+      const images = [];
+      imgInputs.forEach(input => {
+        if (input.value.trim() !== '') {
+          images.push(input.value.trim());
+        }
+      });
+
+      const newItem = { id: Date.now(), title, category, price, inStock: true, images };
+
+      let items = JSON.parse(localStorage.getItem('amk_inventory')) || [];
+      items.push(newItem);
+      localStorage.setItem('amk_inventory', JSON.stringify(items));
+
+      alert(`Garment "${title}" recorded and published!`);
+      closeModal('addItemModal');
+      loadInventory();
+    }
+
+    function deleteGarment(index) {
+      let items = JSON.parse(localStorage.getItem('amk_inventory')) || [];
+      items.splice(index, 1);
+      localStorage.setItem('amk_inventory', JSON.stringify(items));
+      loadInventory();
+    }
+
+    window.addEventListener('DOMContentLoaded', loadInventory);
+  </script>
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMK Clothing - Shopping Cart</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { background-color: #f8fafc; font-family: Arial, sans-serif; margin: 0; }
+    
+    .cart-page-container {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .checkout-steps {
+      display: flex;
+      gap: 15px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #64748b;
+      margin-bottom: 24px;
+      align-items: center;
+    }
+    .checkout-steps span.active {
+      color: #0f172a;
+      border-bottom: 2px solid #227b75;
+      padding-bottom: 4px;
+    }
+
+    .cart-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .cart-layout { grid-template-columns: 1fr; }
+    }
+
+    .cart-items-card, .order-summary-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    }
+
+    .cart-item-row {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .cart-item-row:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .cart-item-img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .cart-item-details h4 {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 6px 0;
+    }
+
+    .cart-item-price {
+      font-size: 14px;
+      font-weight: 700;
+      color: #227b75;
+      margin-bottom: 10px;
+    }
+
+    .cart-item-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .qty-btn-group {
+      display: flex;
+      align-items: center;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .qty-btn-group button {
+      background: #f8fafc;
+      border: none;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #0f172a;
+    }
+    .qty-btn-group button:hover {
+      background: #e2e8f0;
+    }
+    .qty-display {
+      padding: 0 12px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .remove-item-btn {
+      background: none;
+      border: none;
+      color: #ef4444;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    .remove-item-btn:hover {
+      background: #fef2f2;
+    }
+
+    .summary-title {
+      font-size: 18px;
+      font-weight: 900;
+      color: #0f172a;
+      margin-bottom: 16px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 20px;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      background-color: #000000;
+      color: #ffffff;
+      border: none;
+      padding: 14px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: background 0.2s;
+    }
+    .checkout-btn:hover {
+      background-color: #333333;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo">AMK CLOTHING</div>
+    <div class="nav-icons">
+      <a href="index.html" class="signin-header-btn" style="text-decoration: none;">
+        <i class="fa-solid fa-store"></i> Back to Store
+      </a>
+    </div>
+  </header>
+
+  <!-- CART CONTAINER -->
+  <div class="cart-page-container">
+    
+    <div class="checkout-steps">
+      <span class="active">Cart</span> &gt; 
+      <span>Place Order</span> &gt; 
+      <span>Pay</span> &gt; 
+      <span>Order Complete</span>
+    </div>
+
+    <div class="cart-layout">
+      
+      <!-- LEFT: SHOPPING CART ITEMS LIST -->
+      <div class="cart-items-card">
+        <h3 style="font-size: 18px; font-weight: 900; color: #0f172a; margin-top: 0; margin-bottom: 20px;">Shopping Cart Items</h3>
+        
+        <div id="cartItemsContainer">
+          <!-- Dynamically populated cart items -->
+        </div>
+      </div>
+
+      <!-- RIGHT: ORDER SUMMARY -->
+      <div class="order-summary-card">
+        <div class="summary-title">Order Summary</div>
+        <div class="summary-row">
+          <span>Total amount:</span>
+          <span id="orderTotalAmount" style="color: #227b75;">R 770.00</span>
+        </div>
+        <button class="checkout-btn" onclick="window.location.href='place-order.html'">
+          Checkout Now
+        </button>
+
+        <div style="margin-top: 24px;">
+          <span style="font-size: 12px; font-weight: 700; color: #64748b; display: block; margin-bottom: 8px;">We Accept</span>
+          <div style="display: flex; gap: 8px;">
+            <span style="background: #22ab9e; color: white; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: bold;">MasterCard</span>
+            <span style="background: #94a3b8; color: white; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: bold;">EFT Direct</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Initial sample cart items data structure
+    let cartItems = [
+      { id: 1, name: "Tropical Print Maxi Dress", price: 350.00, qty: 1, image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=200&q=80" },
+      { id: 2, name: "Elegance White Midi Dress", price: 420.00, qty: 1, image: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=200&q=80" }
+    ];
+
+    document.addEventListener("DOMContentLoaded", function() {
+      renderCart();
+    });
+
+    function renderCart() {
+      const container = document.getElementById('cartItemsContainer');
+      container.innerHTML = "";
+
+      if (cartItems.length === 0) {
+        container.innerHTML = `<p style="color: #64748b; text-align: center; padding: 20px;">Your shopping cart is empty.</p>`;
+        document.getElementById('orderTotalAmount').textContent = "R 0.00";
+        document.getElementById('cartBadge').textContent = "0";
+        return;
+      }
+
+      let total = 0;
+      let totalQty = 0;
+
+      cartItems.forEach((item, index) => {
+        total += item.price * item.qty;
+        totalQty += item.qty;
+
+        container.innerHTML += `
+          <div class="cart-item-row">
+            <img src="${item.image}" alt="${item.name}" class="cart-item-img">
+            <div class="cart-item-details">
+              <h4>${item.name}</h4>
+              <div class="cart-item-price">R ${item.price.toFixed(2)}</div>
+              <div class="cart-item-controls">
+                <div class="qty-btn-group">
+                  <button onclick="updateQty(${index}, -1)">-</button>
+                  <span class="qty-display">${item.qty}</span>
+                  <button onclick="updateQty(${index}, 1)">+</button>
+                </div>
+              </div>
+            </div>
+            <div>
+              <button class="remove-item-btn" onclick="removeItem(${index})">
+                <i class="fa-solid fa-trash-can"></i> Remove
+              </button>
+            </div>
+          </div>
+        `;
+      });
+
+      document.getElementById('orderTotalAmount').textContent = `R ${total.toFixed(2)}`;
+      const badge = document.getElementById('cartBadge');
+      if (badge) badge.textContent = totalQty;
+    }
+
+    function updateQty(index, change) {
+      cartItems[index].qty += change;
+      if (cartItems[index].qty < 1) {
+        cartItems[index].qty = 1;
+      }
+      renderCart();
+    }
+
+    // FUNCTION TO DELETE / REMOVE AN ITEM FROM CART
+    function removeItem(index) {
+      if (confirm("Are you sure you want to remove this item from your cart?")) {
+        cartItems.splice(index, 1);
+        renderCart();
+      }
+    }
+  </script>
+</body>
+</html>

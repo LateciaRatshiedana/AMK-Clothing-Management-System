@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMK Clothing - Admin Management Hub</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background-color: #f8fafc;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    /* TOP HEADER BAR */
+    .admin-header {
+      background-color: #000000;
+      color: #ffffff;
+      padding: 16px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-logo {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-header-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .header-link {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: bold;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .header-link:hover {
+      color: #227b75;
+    }
+
+    /* LOGOUT BUTTON */
+    .logout-header-btn {
+      background-color: #475569;
+      color: #ffffff;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 13px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 0.2s ease;
+    }
+
+    .logout-header-btn:hover {
+      background-color: #334155;
+    }
+
+    /* FULL WIDTH CONTAINER */
+    .admin-container {
+      width: 100%;
+      padding: 30px 40px;
+      box-sizing: border-box;
+    }
+
+    /* TOP BRANDING & PROFILE BAR */
+    .admin-top-branding {
+      text-align: center;
+      padding: 30px 20px 20px 20px;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .admin-brand-logo {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .admin-brand-logo i {
+      font-size: 38px;
+      color: #227b75;
+    }
+
+    .admin-brand-logo h1 {
+      font-size: 26px;
+      font-weight: 900;
+      margin: 0;
+      color: #0d131a;
+      letter-spacing: 0.5px;
+    }
+
+    /* GRID & CARDS (6 CARDS EVENLY BALANCED) */
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-top: 10px;
+    }
+
+    .admin-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .admin-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .admin-card h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: #1a202c;
+      margin: 0 0 12px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-card h3 i {
+      color: #227b75;
+    }
+
+    .admin-links-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .admin-links-list li {
+      margin-bottom: 8px;
+    }
+
+    .admin-links-list a {
+      color: #227b75;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .admin-links-list a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HEADER WITH PROFILE ICON & LOGOUT -->
+  <header class="admin-header">
+    <div class="admin-logo">
+      <i class="fa-solid fa-scissors" style="color: #227b75;"></i> AMK CLOTHING
+    </div>
+    <div class="admin-header-right">
+      <a href="admin-dashboard.html?tab=edit-profile" class="header-link">
+        <i class="fa-solid fa-user-circle" style="font-size: 16px; color: #227b75;"></i> Profile
+      </a>
+      <a href="index.html" class="header-link">
+        <i class="fa-solid fa-store"></i> Storefront
+      </a>
+      <a href="admin-login.html" class="logout-header-btn">
+        <i class="fa-solid fa-right-from-bracket"></i> Log Out
+      </a>
+    </div>
+  </header>
+
+  <!-- TOP BRANDING HEADER -->
+  <div class="admin-top-branding">
+    <div class="admin-brand-logo">
+      <i class="fa-solid fa-scissors"></i>
+      <h1>AMK Clothing</h1>
+      <span style="font-size: 13px; color: #718096; font-weight: 600;">Admin & Worker Management Portal</span>
+    </div>
+  </div>
+
+  <div class="admin-container">
+
+    <!-- ADMIN SECTIONS GRID (6 MODULES) -->
+    <div class="admin-grid">
+
+      <!-- 1. Customer Management -->
+      <div class="admin-card">
+        <h3><i class="fa-solid fa-users"></i> Customer Management</h3>
+        <p style="font-size: 13px; color: #718096; margin-bottom: 12px;">View registered clients, measure profiles, and contact details.</p>
+        <ul class="admin-links-list">
+          <li><a href="customer-management.html">View All Registered Clients</a></li>
+        </ul>
+      </div>
+
+      <!-- 2. Order Management -->
+      <div class="admin-card">
+        <h3><i class="fa-solid fa-box-open"></i> Order Management</h3>
+        <p style="font-size: 13px; color: #718096; margin-bottom: 12px;">Track bespoke tailoring orders, update status, and log measurements.</p>
+        <ul class="admin-links-list">
+          <li><a href="order-management.html">Create Order &amp; Update Status</a></li>
+          <li><a href="order-management.html">Record Tailor Measurements</a></li>
+        </ul>
+      </div>
+
+      <!-- 3. Payment Management -->
+      <div class="admin-card">
+        <h3><i class="fa-solid fa-credit-card"></i> Payment Management</h3>
+        <p style="font-size: 13px; color: #718096; margin-bottom: 12px;">Process manual payments, verify EFT transfers, and print invoices.</p>
+        <ul class="admin-links-list">
+          <li><a href="payment-management.html">Process Payment &amp; Invoices</a></li>
+        </ul>
+      </div>
+
+      <!-- 4. Inventory Management -->
+      <div class="admin-card">
+        <h3><i class="fa-solid fa-warehouse"></i> Inventory Management</h3>
+        <p style="font-size: 13px; color: #718096; margin-bottom: 12px;">Add new clothing items, update stock levels, and check material alerts.</p>
+        <ul class="admin-links-list">
+          <li><a href="inventory-management.html">Add Item &amp; Update Stock</a></li>
+        </ul>
+      </div>
+
+      <!-- 5. Reports -->
+      <div class="admin-card">
+        <h3><i class="fa-solid fa-chart-line"></i> Reports</h3>
+        <p style="font-size: 13px; color: #718096; margin-bottom: 12px;">Analyze sales performance, inventory turnover, and customer order logs.</p>
+        <ul class="admin-links-list">
+          <li><a href="reports-management.html">Sales Reports</a></li>
+          <li><a href="reports-management.html">Inventory Stock Reports</a></li>
+        </ul>
+      </div>
+
+      <!-- 6. Client Communication & Messages (NEW) -->
+      <div class="admin-card">
+        <h3><i class="fa-solid fa-comments"></i> Communication &amp; Messages</h3>
+        <p style="font-size: 13px; color: #718096; margin-bottom: 12px;">Send fitting updates, email order alerts, and chat directly with clients.</p>
+        <ul class="admin-links-list">
+          <li><a href="customer-management.html">Send Client Notifications &amp; Messages</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>

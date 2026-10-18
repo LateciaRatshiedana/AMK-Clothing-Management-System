@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMK Clothing - Login Portal Selection</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background-color: #f8fafc;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .login-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 40px;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      box-sizing: border-box;
+    }
+
+    .brand-icon {
+      font-size: 38px;
+      color: #227b75;
+      margin-bottom: 10px;
+    }
+
+    .brand-title {
+      font-size: 26px;
+      font-weight: 900;
+      margin: 0 0 4px 0;
+      color: #0f172a;
+    }
+
+    .brand-subtitle {
+      font-size: 13px;
+      color: #64748b;
+      margin: 0 0 25px 0;
+    }
+
+    .portal-heading {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 20px;
+    }
+
+    .btn-client {
+      display: block;
+      width: 100%;
+      background-color: #227b75;
+      color: #ffffff;
+      padding: 13px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 14px;
+      text-decoration: none;
+      margin-bottom: 12px;
+      box-sizing: border-box;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn-client:hover {
+      background-color: #1a5e59;
+    }
+
+    .btn-admin {
+      display: block;
+      width: 100%;
+      background-color: #f1f5f9;
+      color: #0f172a;
+      padding: 13px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 14px;
+      text-decoration: none;
+      margin-bottom: 25px;
+      box-sizing: border-box;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn-admin:hover {
+      background-color: #e2e8f0;
+    }
+
+    .back-home-link {
+      color: #64748b;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: bold;
+      transition: color 0.2s ease;
+    }
+
+    .back-home-link:hover {
+      color: #0f172a;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-card">
+    <div class="brand-icon">
+      <i class="fa-solid fa-scissors"></i>
+    </div>
+    <h1 class="brand-title">AMK Clothing</h1>
+    <p class="brand-subtitle">Fashion Design Management System</p>
+
+    <div class="portal-heading">Select your login portal:</div>
+
+    <a href="client-login.html" class="btn-client">Login as Client</a>
+    <a href="admin-login.html" class="btn-admin">Login as Admin / Staff</a>
+
+    <!-- REMOVED ARROW -->
+    <a href="index.html" class="back-home-link">Back to Home Page</a>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMK Clothing - Search Results</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .search-results-container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    .search-title-header {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .search-subtext {
+      font-size: 14px;
+      color: #718096;
+      margin-bottom: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header class="header">
+    <div class="logo">AMK CLOTHING</div>
+    
+    <form action="search-results.html" method="GET" class="search-container">
+      <input type="text" name="q" id="searchInput" placeholder="Search satin dress, orange dress, XXS..." required />
+      <button type="submit" class="search-btn">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </form>
+
+    <div class="nav-icons">
+      <a href="index.html" class="icon-btn" style="font-size: 14px; text-decoration: none; color: #fff;">← Back to Shop</a>
+      <a href="cart.html" class="icon-btn"><i class="fa-solid fa-cart-shopping"></i></a>
+    </div>
+  </header>
+
+  <div class="search-results-container">
+    <h1 class="search-title-header" id="queryTitle">Search Results</h1>
+    <p class="search-subtext" id="matchCount">Showing results for your search query...</p>
+
+    <!-- SEARCH RESULTS PRODUCT GRID -->
+    <div class="product-grid" id="searchResultsGrid"></div>
+  </div>
+
+  <script>
+    // PRODUCT DATABASE FOR SEARCH
+    const products = [
+      { id: 1, name: "Orange Satin Evening Dress", category: "Women", size: "M", color: "Orange", fabric: "Satin", price: "R350", img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80" },
+      { id: 2, name: "Elegance White Midi Dress", category: "Curve", size: "XL", color: "White", fabric: "Cotton", price: "R420", img: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=400&q=80" },
+      { id: 3, name: "Kids Pink Graphic Set", category: "Kids", size: "S", color: "Pink", fabric: "Cotton", price: "R220", img: "https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?auto=format&fit=crop&w=400&q=80" },
+      { id: 4, name: "Men Tailored Navy Suit & Cargo", category: "Men", size: "L", color: "Navy", fabric: "Wool", price: "R680", img: "https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=400&q=80" },
+      { id: 5, name: "Traditional Print Modern Attire", category: "Traditional Attire", size: "M", color: "Multi", fabric: "Shweshwe", price: "R550", img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=400&q=80" },
+      { id: 6, name: "Petite XXS Satin Summer Dress", category: "Petite", size: "XXS", color: "Red", fabric: "Satin", price: "R310", img: "https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?auto=format&fit=crop&w=400&q=80" },
+      { id: 7, name: "Luxury Gold Jewelry Set", category: "Accessories", size: "Free Size", color: "Gold", fabric: "Metal", price: "R180", img: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=400&q=80" }
+    ];
+
+    // Read URL Search Query
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = (urlParams.get('q') || "").trim().toLowerCase();
+
+    document.getElementById('queryTitle').textContent = query ? `Search Results for "${urlParams.get('q')}"` : "Search Results";
+    document.getElementById('searchInput').value = urlParams.get('q') || "";
+
+    const resultsGrid = document.getElementById('searchResultsGrid');
+    const matchCount = document.getElementById('matchCount');
+
+    // Filter Logic matching Name, Fabric, Color, Category, or Size
+    const filtered = products.filter(p => 
+      p.name.toLowerCase().includes(query) ||
+      p.category.toLowerCase().includes(query) ||
+      p.fabric.toLowerCase().includes(query) ||
+      p.color.toLowerCase().includes(query) ||
+      p.size.toLowerCase() === query ||
+      (query + " dress").includes(p.fabric.toLowerCase())
+    );
+
+    matchCount.textContent = `Found ${filtered.length} matching items.`;
+
+    if (filtered.length === 0) {
+      resultsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #718096; padding: 40px 0;">No matching clothing found for "${urlParams.get('q')}". Try searching for "satin", "orange", "xxs", "men", or "dress".</p>`;
+    } else {
+      filtered.forEach(product => {
+        const card = document.createElement('div');
+        card.className = "product-card";
+        card.innerHTML = `
+          <img src="${product.img}" alt="${product.name}">
+          <div>
+            <div class="product-title">${product.name}</div>
+            <div style="font-size: 12px; color: #666; margin-bottom: 4px;">Size: <strong>${product.size}</strong> | Fabric: <strong>${product.fabric}</strong></div>
+            <div class="product-price">${product.price}</div>
+          </div>
+          <div class="product-actions">
+            <button class="add-cart-btn" onclick="alert('Added to Cart!')">Add to Cart</button>
+            <button class="fav-btn" onclick="alert('Added to Wishlist!')"><i class="fa-regular fa-heart"></i></button>
+          </div>
+        `;
+        resultsGrid.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>

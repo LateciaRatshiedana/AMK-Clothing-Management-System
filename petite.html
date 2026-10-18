@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMK Clothing - Petite Collection</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { background-color: #f8fafc; font-family: Arial, sans-serif; margin: 0; color: #000000; }
+    
+    .catalog-container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .catalog-header {
+      margin-bottom: 24px;
+    }
+    .catalog-header h1 {
+      font-size: 24px;
+      font-weight: 900;
+      color: #0f172a;
+      margin: 0 0 6px 0;
+    }
+    .catalog-header p {
+      font-size: 13px;
+      color: #64748b;
+      margin: 0;
+    }
+
+    /* GRID LAYOUT LIKE SCREENSHOT */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .product-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .product-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    }
+
+    .product-card-img-box {
+      width: 100%;
+      height: 280px;
+      background: #f1f5f9;
+      position: relative;
+    }
+    .product-card-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-card-body {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+    }
+
+    .product-card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0 0 8px 0;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .product-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    .product-card-price {
+      font-size: 16px;
+      font-weight: 900;
+      color: #0f172a;
+    }
+
+    .quick-add-btn {
+      background-color: #000000;
+      color: #ffffff;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .quick-add-btn:hover {
+      background-color: #227b75;
+    }
+
+    /* DETAIL VIEW MODAL / CONTAINER */
+    #detailViewModal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 2000;
+      overflow-y: auto;
+      padding: 40px 20px;
+      box-sizing: border-box;
+    }
+    .modal-content-box {
+      background: #ffffff;
+      max-width: 900px;
+      margin: 0 auto;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      padding: 30px;
+    }
+    .close-modal-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: #64748b;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      align-items: start;
+    }
+    @media (max-width: 768px) { .detail-grid { grid-template-columns: 1fr; } }
+
+    /* IMAGE SLIDER STYLES */
+    .slider-container {
+      position: relative;
+      width: 100%;
+      height: 420px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+    }
+    .slider-slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+    }
+    .slider-slide.active { display: block; }
+    .slider-slide img { width: 100%; height: 100%; object-fit: cover; }
+    .slider-counter {
+      position: absolute; bottom: 12px; right: 12px;
+      background: rgba(0,0,0,0.6); color: #fff;
+      padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: bold;
+    }
+    .slider-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,0.8); border: none; width: 32px; height: 32px;
+      border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #0f172a;
+    }
+    .slider-prev { left: 10px; }
+    .slider-next { right: 10px; }
+
+    /* SIZE SELECTOR PILLS */
+    .size-pills-grid {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
+    }
+    .size-pill-btn {
+      background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px;
+      padding: 8px 14px; font-size: 13px; font-weight: 700; cursor: pointer; color: #0f172a;
+    }
+    .size-pill-btn:hover, .size-pill-btn.active {
+      border-color: #000000; background-color: #000000; color: #ffffff;
+    }
+
+    /* NAVY BLUE WISHLIST HEART */
+    .wishlist-heart-btn {
+      width: 48px; height: 48px; border-radius: 50%; border: 1px solid #cbd5e1;
+      background: #ffffff; display: flex; align-items: center; justify-content: center;
+      font-size: 18px; color: #0f172a; cursor: pointer;
+    }
+    .wishlist-heart-btn.favorited {
+      color: #1e3a8a !important; border-color: #1e3a8a !important; background: #eff6ff !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo">AMK CLOTHING</div>
+    <div class="nav-icons">
+      <a href="index.html" class="signin-header-btn" style="text-decoration: none;">
+        <i class="fa-solid fa-store"></i> Back to Store
+      </a>
+    </div>
+  </header>
+
+  <!-- CATALOG GRID CONTAINER -->
+  <div class="catalog-container">
+    <div class="catalog-header">
+      <h1>Petite Collection</h1>
+      <p>Bespoke custom-tailored outfits starting from XXS.</p>
+    </div>
+
+    <!-- GRID OF UPLOADED PETITE PICTURES -->
+    <div class="product-grid" id="petiteProductGrid">
+      <!-- Populated via JavaScript -->
+    </div>
+  </div>
+
+  <!-- DETAIL VIEW MODAL (OPENS WHEN CLICKING A CLOTHING ITEM) -->
+  <div id="detailViewModal">
+    <div class="modal-content-box">
+      <button class="close-modal-btn" onclick="closeProductDetail()"><i class="fa-solid fa-xmark"></i></button>
+      
+      <div class="detail-grid">
+        <!-- IMAGE SLIDER -->
+        <div>
+          <div class="slider-container" id="modalSlider">
+            <!-- Populated dynamically -->
+            <button class="slider-btn slider-prev" onclick="moveSlide(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+            <button class="slider-btn slider-next" onclick="moveSlide(1)"><i class="fa-solid fa-chevron-right"></i></button>
+            <div class="slider-counter" id="slideCounter">1/3</div>
+          </div>
+        </div>
+
+        <!-- PRODUCT SPECS & SIZES STARTING FROM XXS -->
+        <div>
+          <span style="font-size: 11px; font-weight: 800; color: #227b75; text-transform: uppercase;">AMK Petite Bespoke</span>
+          <h2 id="modalTitle" style="font-size: 20px; font-weight: 900; margin: 6px 0 12px 0; color: #0f172a;"></h2>
+          <div id="modalPrice" style="font-size: 22px; font-weight: 900; color: #227b75; margin-bottom: 16px;"></div>
+          
+          <p style="font-size: 13px; color: #64748b; line-height: 1.5; margin-bottom: 20px;">
+            Handcrafted to your precise measurements by our master tailors in Johannesburg.
+          </p>
+
+          <div style="font-size: 13px; font-weight: 800; margin-bottom: 8px;">Size: <span id="selectedSizeText" style="font-weight: normal; color: #64748b;">Select size</span></div>
+          <div class="size-pills-grid" id="modalSizesGrid">
+            <button class="size-pill-btn" onclick="selectSize(this, 'Petite XXS')">Petite XXS</button>
+            <button class="size-pill-btn" onclick="selectSize(this, 'Petite XS')">Petite XS</button>
+            <button class="size-pill-btn" onclick="selectSize(this, 'Petite S')">Petite S</button>
+            <button class="size-pill-btn" onclick="selectSize(this, 'Petite M')">Petite M</button>
+            <button class="size-pill-btn" onclick="selectSize(this, 'Petite L')">Petite L</button>
+          </div>
+
+          <div style="display: flex; gap: 14px; align-items: center; margin-top: 24px;">
+            <button class="wishlist-heart-btn" id="modalWishlistBtn" onclick="toggleNavyWishlist()" title="Add to Wishlist">
+              <i class="fa-solid fa-heart"></i>
+            </button>
+            <button style="flex: 1; background: #000000; color: #fff; border: none; padding: 14px; font-weight: 900; border-radius: 6px; cursor: pointer;" onclick="addToCartModal()">
+              ADD TO CART
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VERIFIED REVIEWS SECTION WITH PHOTO UPLOAD -->
+      <div style="margin-top: 40px; border-top: 1px solid #e2e8f0; padding-top: 24px;">
+        <h3 style="font-size: 18px; font-weight: 900; margin-bottom: 6px;">Customer Reviews</h3>
+        <p style="font-size: 13px; color: #64748b; margin-bottom: 16px;">Reviews are exclusively written by verified customers who purchased and received this bespoke item.</p>
+
+        <div id="verifiedReviewsList">
+          <p style="font-style: italic; color: #94a3b8; font-size: 13px;">No reviews yet. Be the first verified customer to review this bespoke design after purchase!</p>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 20px; margin-top: 24px;">
+          <h4 style="margin: 0 0 6px 0; font-size: 15px; font-weight: 800;">Write a Verified Review</h4>
+          <p style="font-size: 12px; color: #64748b; margin-bottom: 14px;">Enter a valid order reference number (e.g. #AMK-8891) and <strong>upload a photo of your product</strong> to review.</p>
+          
+          <form onsubmit="submitVerifiedReview(event)">
+            <div style="margin-bottom: 10px;">
+              <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 4px;">Order Reference Number</label>
+              <input type="text" id="reviewOrderRef" placeholder="#AMK-8891" required style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px; box-sizing: border-box;">
+            </div>
+            <div style="margin-bottom: 10px;">
+              <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 4px;">Rating</label>
+              <select id="reviewRating" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px; background: white;">
+                <option value="5">★★★★★ (5 Stars)</option>
+                <option value="4">★★★★☆ (4 Stars)</option>
+                <option value="3">★★★☆☆ (3 Stars)</option>
+              </select>
+            </div>
+            <div style="margin-bottom: 10px;">
+              <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 4px;">Upload Photo of Your Product</label>
+              <input type="file" id="reviewPhoto" accept="image/*" required style="width: 100%; font-size: 12px;">
+            </div>
+            <div style="margin-bottom: 12px;">
+              <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 4px;">Comments</label>
+              <textarea id="reviewComment" rows="2" placeholder="Share how it fits..." required style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px; box-sizing: border-box;"></textarea>
+            </div>
+            <button type="submit" style="background: #227b75; color: white; border: none; padding: 8px 16px; font-weight: bold; border-radius: 4px; cursor: pointer; font-size: 13px;">Submit Review</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // PETITE DRESSES MAPPED TO YOUR LOCAL FOLDER PATHS
+    const petiteProducts = [
+      {
+        id: 1,
+        title: "Signature Petite Tailored Evening Dress",
+        price: "R 1,650.00",
+        images: [
+          "Images/Outfit_Pics/WomanPetitedress.jpg",
+          "Images/Outfit_Pics/WomanPetitedress2.jpg",
+          "Images/Outfit_Pics/WomanPetitedress3.jpg"
+        ]
+      },
+      {
+        id: 2,
+        title: "Classic Petite Summer Wrap Dress",
+        price: "R 1,450.00",
+        images: [
+          "Images/Outfit_Pics/womanpetitedress4.jpg",
+          "Images/Outfit_Pics/womanpetitedress5.jpg",
+          "Images/Outfit_Pics/womanpetitedress6.jpg"
+        ]
+      },
+      {
+        id: 3,
+        title: "Modern Petite Fitted Cocktail Dress",
+        price: "R 1,750.00",
+        images: [
+          "Images/Outfit_Pics/womanpetitedress7.jpg",
+          "Images/Outfit_Pics/womanpetitedress8.jpg",
+          "Images/Outfit_Pics/WomanPetitedress.jpg"
+        ]
+      }
+    ];
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const grid = document.getElementById('petiteProductGrid');
+      grid.innerHTML = "";
+
+      petiteProducts.forEach(prod => {
+        grid.innerHTML += `
+          <div class="product-card" onclick="openProductDetail(${prod.id})">
+            <div class="product-card-img-box">
+              <img src="${prod.images[0]}" alt="${prod.title}" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80'">
+            </div>
+            <div class="product-card-body">
+              <h3 class="product-card-title">${prod.title}</h3>
+              <div class="product-card-footer">
+                <span class="product-card-price">${prod.price}</span>
+                <button class="quick-add-btn" onclick="event.stopPropagation(); openProductDetail(${prod.id})"><i class="fa-solid fa-eye"></i></button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    });
+
+    let currentSelectedProduct = null;
+    let currentSlideIdx = 0;
+    let currentImages = [];
+    let selectedSize = "";
+
+    function openProductDetail(productId) {
+      const prod = petiteProducts.find(p => p.id === productId);
+      if (!prod) return;
+      currentSelectedProduct = prod;
+      currentImages = prod.images;
+      currentSlideIdx = 0;
+
+      document.getElementById('modalTitle').textContent = prod.title;
+      document.getElementById('modalPrice').textContent = prod.price;
+      document.getElementById('selectedSizeText').textContent = "Select size";
+      selectedSize = "";
+      document.querySelectorAll('.size-pill-btn').forEach(b => b.classList.remove('active'));
+
+      renderSlider();
+      document.getElementById('detailViewModal').style.display = 'block';
+    }
+
+    function closeProductDetail() {
+      document.getElementById('detailViewModal').style.display = 'none';
+    }
+
+    function renderSlider() {
+      const sliderBox = document.getElementById('modalSlider');
+      // Keep buttons and counter, update slides
+      let slidesHtml = '';
+      currentImages.forEach((img, idx) => {
+        slidesHtml += `
+          <div class="slider-slide ${idx === 0 ? 'active' : ''}">
+            <img src="${img}" alt="View ${idx+1}" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80'">
+          </div>
+        `;
+      });
+      
+      sliderBox.innerHTML = slidesHtml + `
+        <button class="slider-btn slider-prev" onclick="moveSlide(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="slider-btn slider-next" onclick="moveSlide(1)"><i class="fa-solid fa-chevron-right"></i></button>
+        <div class="slider-counter" id="slideCounter">1/${currentImages.length}</div>
+      `;
+    }
+
+    function moveSlide(dir) {
+      const slides = document.querySelectorAll('.slider-slide');
+      slides[currentSlideIdx].classList.remove('active');
+      currentSlideIdx += dir;
+      if (currentSlideIdx >= slides.length) currentSlideIdx = 0;
+      if (currentSlideIdx < 0) currentSlideIdx = slides.length - 1;
+      slides[currentSlideIdx].classList.add('active');
+      document.getElementById('slideCounter').textContent = `${currentSlideIdx + 1}/${slides.length}`;
+    }
+
+    function selectSize(btn, size) {
+      document.querySelectorAll('.size-pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedSize = size;
+      document.getElementById('selectedSizeText').textContent = size;
+    }
+
+    function toggleNavyWishlist() {
+      const btn = document.getElementById('modalWishlistBtn');
+      btn.classList.toggle('favorited');
+      if (btn.classList.contains('favorited')) {
+        alert("Added to your Wishlist!");
+      } else {
+        alert("Removed from Wishlist.");
+      }
+    }
+
+    function addToCartModal() {
+      if (!selectedSize) {
+        alert("Please select a size (starting from Petite XXS) before adding to cart.");
+        return;
+      }
+      alert(`Successfully added ${currentSelectedProduct.title} (${selectedSize}) to cart!`);
+      closeProductDetail();
+    }
+
+    // VERIFIED REVIEWS WITH PHOTO UPLOAD
+    let reviewsListArray = [];
+    function submitVerifiedReview(e) {
+      e.preventDefault();
+      const orderRef = document.getElementById('reviewOrderRef').value.trim();
+      const comment = document.getElementById('reviewComment').value.trim();
+      const rating = parseInt(document.getElementById('reviewRating').value);
+      const photoInput = document.getElementById('reviewPhoto');
+
+      if (!orderRef.startsWith("#AMK")) {
+        alert("Verification Error: Please enter a valid order reference number starting with #AMK.");
+        return;
+      }
+      if (photoInput.files.length === 0) {
+        alert("Product photo required to post a verified review.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        reviewsListArray.push({ order: orderRef, rating: rating, comment: comment, image: evt.target.result });
+        renderModalReviews();
+        alert("Review verified and posted successfully!");
+        e.target.reset();
+      };
+      reader.readAsDataURL(photoInput.files[0]);
+    }
+
+    function renderModalReviews() {
+      const list = document.getElementById('verifiedReviewsList');
+      list.innerHTML = "";
+      if (reviewsListArray.length === 0) {
+        list.innerHTML = `<p style="font-style: italic; color: #94a3b8; font-size: 13px;">No reviews yet. Be the first verified customer to review this bespoke design after purchase!</p>`;
+        return;
+      }
+
+      reviewsListArray.forEach(r => {
+        let stars = '<i class="fa-solid fa-star" style="color: #f59e0b;"></i>'.repeat(r.rating);
+        list.innerHTML += `
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; margin-bottom: 4px;">
+              <span>Verified Client (${r.order})</span>
+              <span style="background: #d1fae5; color: #065f46; font-size: 10px; padding: 2px 6px; border-radius: 4px;"><i class="fa-solid fa-check-circle"></i> Verified Buyer</span>
+            </div>
+            <div style="margin-bottom: 6px;">${stars}</div>
+            <p style="font-size: 13px; color: #334155; margin: 0 0 8px 0;">${r.comment}</p>
+            <img src="${r.image}" style="width: 70px; height: 70px; object-fit: cover; border-radius: 4px; border: 1px solid #cbd5e1;" alt="Product Photo">
+          </div>
+        `;
+      });
+    }
+  </script>
+</body>
+</html>
