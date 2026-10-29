@@ -320,21 +320,21 @@
           <i class="fa-solid fa-comments" style="color: #227b75;"></i>
         </div>
         <ul class="client-chat-list">
-          <li class="chat-item active" onclick="switchConversation('Latecia Ratshiedana', '#AMK-8891', 'Orange Satin Evening Dress')">
+          <li class="chat-item active" onclick="switchConversation('Latecia Ratshiedana', '#AMK-8891', 'Orange Satin Evening Dress', event)">
             <div class="client-avatar">LR</div>
             <div class="chat-meta">
               <h4 class="client-name">Latecia Ratshiedana</h4>
               <p class="preview-msg">Is my Orange Satin dress ready for fitting?</p>
             </div>
           </li>
-          <li class="chat-item" onclick="switchConversation('Sarah Dlamini', '#AMK-8894', 'Custom Tailored Navy Suit')">
+          <li class="chat-item" onclick="switchConversation('Sarah Dlamini', '#AMK-8894', 'Custom Tailored Navy Suit', event)">
             <div class="client-avatar" style="background:#0f172a;">SD</div>
             <div class="chat-meta">
               <h4 class="client-name">Sarah Dlamini</h4>
               <p class="preview-msg">I sent the proof of deposit transfer!</p>
             </div>
           </li>
-          <li class="chat-item" onclick="switchConversation('Sipho Khumalo', '#AMK-8895', 'Shweshwe Print Attire')">
+          <li class="chat-item" onclick="switchConversation('Sipho Khumalo', '#AMK-8895', 'Shweshwe Print Attire', event)">
             <div class="client-avatar" style="background:#475569;">SK</div>
             <div class="chat-meta">
               <h4 class="client-name">Sipho Khumalo</h4>
@@ -415,7 +415,7 @@
     let currentClient = "Latecia Ratshiedana";
     let currentRef = "#AMK-8891";
 
-    function switchConversation(name, ref, item) {
+    function switchConversation(name, ref, item, event) {
       currentClient = name;
       currentRef = ref;
 

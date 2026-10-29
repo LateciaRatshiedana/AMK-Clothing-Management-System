@@ -3,95 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AMK Clothing - Tailor Support Chat</title>
+  <title>AMK Clothing - Master Tailor Live Support</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body { background-color: #f8fafc; font-family: Arial, sans-serif; margin: 0; }
-    
-    /* CHAT CONTAINER */
-    .chat-container {
-      max-width: 800px;
-      margin: 30px auto;
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-      display: flex;
-      flex-direction: column;
-      height: 75vh;
-    }
-
-    .chat-header {
-      background-color: #0f172a;
-      color: #ffffff;
-      padding: 18px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .chat-header h2 {
+    body {
+      background-color: #f8fafc;
       margin: 0;
-      font-size: 18px;
-      font-weight: 800;
+      font-family: Arial, sans-serif;
+      color: #0f172a;
+    }
+    .store-header {
+      background-color: #000000;
+      color: #ffffff;
+      padding: 16px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .store-logo {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 1px;
       display: flex;
       align-items: center;
       gap: 10px;
+      color: #ffffff;
+      text-decoration: none;
     }
-
-    .chat-messages {
+    .container {
+      max-width: 850px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .chat-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+      display: flex;
+      flex-direction: column;
+      height: 600px;
+      overflow: hidden;
+    }
+    .chat-header {
+      background: #0f172a;
+      color: #ffffff;
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 800;
+      font-size: 16px;
+    }
+    .messages-area {
       flex: 1;
       padding: 24px;
       overflow-y: auto;
+      background: #f8fafc;
       display: flex;
       flex-direction: column;
       gap: 16px;
-      background: #fdfdfd;
     }
-
-    /* MESSAGE BUBBLES */
-    .message {
+    .bubble {
       max-width: 70%;
       padding: 12px 16px;
       border-radius: 10px;
-      font-size: 14px;
+      font-size: 13px;
       line-height: 1.5;
-      position: relative;
     }
-
-    .message.client {
-      background-color: #227b75;
+    .bubble-support {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      align-self: flex-start;
+      color: #0f172a;
+    }
+    .bubble-client {
+      background: #227b75;
       color: #ffffff;
       align-self: flex-end;
-      border-bottom-right-radius: 2px;
     }
-
-    .message.support {
-      background-color: #f1f5f9;
-      color: #0f172a;
-      align-self: flex-start;
-      border-bottom-left-radius: 2px;
-    }
-
-    .message-time {
+    .timestamp {
       font-size: 10px;
-      opacity: 0.8;
-      margin-top: 6px;
+      opacity: 0.7;
+      margin-top: 4px;
       text-align: right;
     }
-
-    /* CHAT INPUT AREA */
-    .chat-input-area {
+    .chat-input-row {
       padding: 16px 24px;
       background: #ffffff;
       border-top: 1px solid #e2e8f0;
       display: flex;
       gap: 12px;
     }
-
-    .chat-input-area input {
+    .chat-input-row input {
       flex: 1;
       padding: 12px 16px;
       border: 1px solid #cbd5e1;
@@ -99,24 +104,22 @@
       font-size: 14px;
       outline: none;
     }
-
-    .chat-input-area input:focus {
+    .chat-input-row input:focus {
       border-color: #227b75;
     }
-
     .send-btn {
       background-color: #227b75;
       color: #ffffff;
       border: none;
-      padding: 0 20px;
+      padding: 12px 22px;
       border-radius: 6px;
       font-weight: bold;
+      font-size: 14px;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 8px;
     }
-
     .send-btn:hover {
       background-color: #1a5e59;
     }
@@ -124,77 +127,68 @@
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header class="header">
-    <div class="logo">AMK CLOTHING</div>
-    <div class="nav-icons">
-      <a href="index.html" class="signin-header-btn" style="text-decoration: none;">
-        <i class="fa-solid fa-store"></i> Back to Store
-      </a>
-    </div>
+  <header class="store-header">
+    <a href="index.html" class="store-logo">
+      <i class="fa-solid fa-scissors" style="color: #227b75;"></i> AMK CLOTHING
+    </a>
+    <a href="order-complete.html" style="color: #ffffff; text-decoration: none; font-size: 13px; font-weight: bold;">
+      <i class="fa-solid fa-arrow-left"></i> Back to Order Complete
+    </a>
   </header>
 
-  <!-- CHAT INTERFACE -->
-  <div class="chat-container">
-    <div class="chat-header">
-      <h2><i class="fa-solid fa-headset" style="color: #227b75;"></i> Master Tailor Live Support</h2>
-      <span style="font-size: 12px; color: #94a3b8;"><i class="fa-solid fa-circle" style="color: #10b981; font-size: 8px;"></i> Online</span>
-    </div>
-
-    <!-- CLEAN CHAT MESSAGES WINDOW (PRESET BUBBLES REMOVED) -->
-    <div class="chat-messages" id="chatMessagesBox">
-      <div class="message support">
-        Hello! Welcome to AMK Clothing bespoke tailoring support. How can our master tailors assist you with your custom outfit today?
-        <div class="message-time">Just now</div>
+  <div class="container">
+    <div class="chat-card">
+      <div class="chat-header">
+        <span><i class="fa-solid fa-headset" style="color: #227b75; margin-right: 8px;"></i> Master Tailor Live Support (#AMK-8891)</span>
+        <span style="font-size: 12px; color: #34d399;"><i class="fa-solid fa-circle" style="font-size: 9px;"></i> Tailors Online</span>
       </div>
-    </div>
 
-    <!-- MESSAGE INPUT FORM -->
-    <form class="chat-input-area" onsubmit="sendClientMessage(event)">
-      <input type="text" id="clientMessageInput" placeholder="Type your message or ask about measurements..." autocomplete="off" required>
-      <button type="submit" class="send-btn">
-        <i class="fa-solid fa-paper-plane"></i> Send
-      </button>
-    </form>
+      <div class="messages-area" id="chatMessages">
+        <div class="bubble bubble-support">
+          Hello Latecia! Welcome to AMK Clothing bespoke support. Our master tailors have received your order #AMK-8891. Send us your measurements or styling notes here!
+          <div class="timestamp">Just now</div>
+        </div>
+      </div>
+
+      <form class="chat-input-row" onsubmit="handleSendClientMsg(event)">
+        <input type="text" id="clientInput" placeholder="Type your message or ask about measurements..." required>
+        <button type="submit" class="send-btn">
+          <i class="fa-solid fa-paper-plane"></i> Send
+        </button>
+      </form>
+    </div>
   </div>
 
   <script>
-    function sendClientMessage(e) {
+    function handleSendClientMsg(e) {
       e.preventDefault();
-      const input = document.getElementById('clientMessageInput');
-      const messageText = input.value.trim();
-      if (!messageText) return;
+      const input = document.getElementById('clientInput');
+      const text = input.value.trim();
 
-      const chatBox = document.getElementById('chatMessagesBox');
-      const timeNow = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      if(text !== '') {
+        const area = document.getElementById('chatMessages');
+        const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-      // Append client message
-      chatBox.innerHTML += `
-        <div class="message client">
-          ${escapeHtml(messageText)}
-          <div class="message-time">${timeNow}</div>
-        </div>
-      `;
+        // Add client message
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'bubble bubble-client';
+        msgDiv.innerHTML = `${text}<div class="timestamp">${now}</div>`;
+        area.appendChild(msgDiv);
 
-      input.value = '';
-      chatBox.scrollTop = chatBox.scrollHeight;
+        input.value = '';
+        area.scrollTop = area.scrollHeight;
 
-      // Simulate automated professional tailor reply after 1 second
-      setTimeout(() => {
-        chatBox.innerHTML += `
-          <div class="message support">
-            Thank you for your message! Our master tailoring team has received your request and will get back to you shortly.
-            <div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-          </div>
-        `;
-        chatBox.scrollTop = chatBox.scrollHeight;
-      }, 1000);
-    }
-
-    function escapeHtml(text) {
-      const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-      return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        // Simulate tailor reply after 1 second
+        setTimeout(() => {
+          const replyDiv = document.createElement('div');
+          replyDiv.className = 'bubble bubble-support';
+          replyDiv.innerHTML = `Thank you! Our master tailors have noted your request and will update your fitting schedule shortly.<div class="timestamp">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>`;
+          area.appendChild(replyDiv);
+          area.scrollTop = area.scrollHeight;
+        }, 1000);
+      }
     }
   </script>
+
 </body>
 </html>

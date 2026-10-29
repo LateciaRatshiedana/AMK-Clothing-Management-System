@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMK Clothing - Order Completed</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background-color: #f8fafc;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #0f172a;
+    }
+    .store-header {
+      background-color: #000000;
+      color: #ffffff;
+      padding: 16px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .store-logo {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+      text-decoration: none;
+    }
+    .container {
+      max-width: 650px;
+      margin: 50px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+    .breadcrumb {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 25px;
+      font-weight: 600;
+    }
+    .breadcrumb span {
+      color: #227b75;
+    }
+    .success-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 40px 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    }
+    .success-icon {
+      font-size: 55px;
+      color: #227b75;
+      margin-bottom: 15px;
+    }
+    h2 {
+      margin: 0 0 10px 0;
+      font-weight: 900;
+      font-size: 24px;
+    }
+    p {
+      color: #64748b;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+    .order-ref {
+      background-color: #f1f5f9;
+      padding: 10px 18px;
+      border-radius: 6px;
+      display: inline-block;
+      font-weight: bold;
+      color: #0f172a;
+      margin-bottom: 25px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+    .btn-action {
+      background-color: #227b75;
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .btn-secondary {
+      background-color: #0f172a;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="store-header">
+    <a href="index.html" class="store-logo">
+      <i class="fa-solid fa-scissors" style="color: #227b75;"></i> AMK CLOTHING
+    </a>
+  </header>
+
+  <div class="container">
+    <div class="breadcrumb">
+      Cart > Place Order > Pay > <span>Order Complete</span>
+    </div>
+
+    <div class="success-card">
+      <i class="fa-solid fa-circle-check success-icon"></i>
+      <h2>Thank You For Your Support!</h2>
+      <p>Your order has been placed successfully and is now sent to our tailoring team. You will receive an SMS and email update once cutting begins.</p>
+
+      <div class="order-ref">
+        Order Reference: #AMK-8891
+      </div>
+
+      <div class="btn-group">
+        <a href="index.html" class="btn-action">Return to Store</a>
+        <a href="client-support.html" class="btn-action btn-secondary">Chat with Tailor</a>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
