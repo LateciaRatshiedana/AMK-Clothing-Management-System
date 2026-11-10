@@ -5,7 +5,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   // Initialize default client data structure if not present
   if (!localStorage.getItem('userName')) {
-    localStorage.setItem('userName', 'Latecia');
+    localStorage.setItem('userName', 'Latecia Ratshiedana');
     localStorage.setItem('userEmail', 'latecia@rosebank.co.za');
     localStorage.setItem('userPhone', '+27 82 000 0000');
     localStorage.setItem('userPassword', '••••••••');
@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   updateHeaderAuthState();
   syncCartAndWishlistBadges();
+  loadClientOrderTracking();
 });
 
 /* =================================================_
@@ -24,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function updateHeaderAuthState() {
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
   const authText = document.getElementById('headerAuthText');
-  const clientName = localStorage.getItem('userName') || 'Latecia';
+  const clientName = localStorage.getItem('userName') || 'Latecia Ratshiedana';
   const clientEmail = localStorage.getItem('userEmail') || 'latecia@rosebank.co.za';
 
   if (isLoggedIn && authText) {
@@ -77,9 +78,9 @@ function checkClientAuth(actionName) {
   if (!isLoggedIn) {
     alert(`Authentication Required: Please sign in or create an account to ${actionName}.`);
     window.location.href = 'login-selection.html';
-    return false; // Blocks navigation
+    return false; 
   }
-  return true; // Allows access
+  return true; 
 }
 
 /* =================================================_
@@ -90,7 +91,7 @@ function openEditProfileModal() {
   const dropdown = document.getElementById('storefrontProfileDropdown');
   if (dropdown) dropdown.style.display = 'none';
 
-  const currentName = localStorage.getItem('userName') || 'Latecia';
+  const currentName = localStorage.getItem('userName') || 'Latecia Ratshiedana';
   const currentEmail = localStorage.getItem('userEmail') || 'latecia@rosebank.co.za';
   const currentPhone = localStorage.getItem('userPhone') || '+27 82 000 0000';
   const currentPassword = localStorage.getItem('userPassword') || '••••••••';
@@ -197,4 +198,43 @@ function syncCartAndWishlistBadges() {
   if (wishlistBadge) {
     wishlistBadge.textContent = wishlist.length;
   }
+}
+
+/* =================================================_
+   5. AUTOMATIC CLIENT ORDER TRACKING SYNC
+   ================================================= */
+function loadClientOrderTracking() {
+  const container = document.getElementById('clientOrdersContainer');
+  if (!container) return;
+
+  // Retrieve all live orders synced from admin
+  const liveOrders = JSON.parse(localStorage.getItem('amk_live_orders')) || [];
+  
+  // Filter automatically by the currently logged-in client name
+  const currentUserName = localStorage.getItem('userName') || 'Latecia Ratshiedana';
+  const clientOrders = liveOrders.filter(o => o.client.toLowerCase() === currentUserName.toLowerCase());
+
+  container.innerHTML = '';
+  
+  if (clientOrders.length === 0) {
+    container.innerHTML = '<p style="color:#64748b; font-size:14px; text-align:center; padding:20px;">No active orders found for your account.</p>';
+    return;
+  }
+
+  clientOrders.forEach(order => {
+    let badgeClass = 'status-pending';
+    if (order.status === 'In Production') badgeClass = 'status-production';
+    if (order.status === 'Ready for Delivery' || order.status === 'Completed') badgeClass = 'status-ready';
+
+    container.innerHTML += `
+      <div class="order-tracking-card" style="background:#fff; border:1px solid #e2e8f0; padding:20px; border-radius:8px; margin-bottom:15px; box-shadow:0 2px 5px rgba(0,0,0,0.02);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <strong style="font-size:16px; color:#0f172a;">Order Ref: ${order.ref}</strong>
+          <span class="status-pill ${badgeClass}" style="padding:4px 10px; border-radius:12px; font-size:12px; font-weight:800;">${order.status}</span>
+        </div>
+        <p style="margin:5px 0; color:#475569; font-size:14px;"><strong>Garment:</strong> ${order.garment}</p>
+        <p style="margin:5px 0; font-size:14px; color:#0f172a;"><strong>Total:</strong> ${order.total}</p>
+      </div>
+    `;
+  });
 }

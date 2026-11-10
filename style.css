@@ -395,3 +395,20 @@ body {
   color: #718096;
   font-size: 13px;
 }
+
+.breadcrumb a {
+  color: #64748b;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.breadcrumb a:hover {
+  color: #227b75;
+  text-decoration: underline;
+}
+
+.breadcrumb .active-step {
+  color: #227b75;
+  font-weight: 800;
+}

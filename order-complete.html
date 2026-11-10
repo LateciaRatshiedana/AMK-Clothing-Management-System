@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AMK Clothing - Order Completed</title>
+  <title>AMK Clothing - Order Complete</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -32,8 +32,8 @@
       text-decoration: none;
     }
     .container {
-      max-width: 650px;
-      margin: 50px auto;
+      max-width: 800px;
+      margin: 40px auto;
       padding: 0 20px;
       text-align: center;
     }
@@ -42,11 +42,22 @@
       color: #64748b;
       margin-bottom: 25px;
       font-weight: 600;
+      text-align: left;
     }
-    .breadcrumb span {
+    .breadcrumb a {
+      color: #64748b;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .breadcrumb a:hover {
       color: #227b75;
+      text-decoration: underline;
     }
-    .success-card {
+    .breadcrumb .active-step {
+      color: #227b75;
+      font-weight: 800;
+    }
+    .complete-card {
       background: #ffffff;
       border: 1px solid #e2e8f0;
       border-radius: 10px;
@@ -54,46 +65,66 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.02);
     }
     .success-icon {
-      font-size: 55px;
-      color: #227b75;
+      font-size: 48px;
+      color: #16a34a;
       margin-bottom: 15px;
     }
     h2 {
-      margin: 0 0 10px 0;
+      margin-top: 0;
       font-weight: 900;
       font-size: 24px;
+      margin-bottom: 10px;
     }
     p {
       color: #64748b;
       font-size: 14px;
-      line-height: 1.6;
+      line-height: 1.5;
       margin-bottom: 25px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
     }
-    .order-ref {
-      background-color: #f1f5f9;
-      padding: 10px 18px;
-      border-radius: 6px;
+    .ref-badge {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
       display: inline-block;
+      padding: 10px 20px;
+      border-radius: 6px;
       font-weight: bold;
+      font-size: 15px;
       color: #0f172a;
-      margin-bottom: 25px;
+      margin-bottom: 30px;
     }
-    .btn-group {
+    .btn-row {
       display: flex;
       gap: 12px;
       justify-content: center;
     }
-    .btn-action {
-      background-color: #227b75;
-      color: #ffffff;
-      padding: 12px 20px;
+    .btn {
+      padding: 12px 24px;
       border-radius: 6px;
-      text-decoration: none;
       font-weight: bold;
       font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background-color 0.2s;
     }
-    .btn-secondary {
+    .btn-primary {
+      background-color: #227b75;
+      color: #ffffff;
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: #1a5e59;
+    }
+    .btn-dark {
       background-color: #0f172a;
+      color: #ffffff;
+      border: none;
+    }
+    .btn-dark:hover {
+      background-color: #1e293b;
     }
   </style>
 </head>
@@ -107,24 +138,43 @@
 
   <div class="container">
     <div class="breadcrumb">
-      Cart > Place Order > Pay > <span>Order Complete</span>
+      <a href="cart.html">Cart</a> &gt; 
+      <a href="place-order.html">Place Order</a> &gt; 
+      <a href="payment.html">Pay</a> &gt; 
+      <span class="active-step">Order Complete</span>
     </div>
 
-    <div class="success-card">
-      <i class="fa-solid fa-circle-check success-icon"></i>
+    <div class="complete-card">
+      <div class="success-icon">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
       <h2>Thank You For Your Support!</h2>
-      <p>Your order has been placed successfully and is now sent to our tailoring team. You will receive an SMS and email update once cutting begins.</p>
+      <p>Your order has been placed successfully and sent to our bespoke tailoring team. You can now monitor its production status live from your cart or dashboard.</p>
 
-      <div class="order-ref">
-        Order Reference: #AMK-8891
+      <div>
+        <div class="ref-badge" id="orderRefDisplay">Order Reference: #AMK-8891</div>
       </div>
 
-      <div class="btn-group">
-        <a href="index.html" class="btn-action">Return to Store</a>
-        <a href="client-support.html" class="btn-action btn-secondary">Chat with Tailor</a>
+      <div class="btn-row">
+        <a href="cart.html" class="btn btn-primary">Return to Cart &amp; Tracking</a>
+        <a href="client-communication.html" class="btn btn-dark">Chat with Tailor</a>
       </div>
     </div>
   </div>
+
+  <script>
+    // Generate or display dynamic order reference if saved in localStorage
+    window.addEventListener('DOMContentLoaded', () => {
+      const liveOrders = JSON.parse(localStorage.getItem('amk_live_orders')) || [];
+      if (liveOrders.length > 0) {
+        const latestOrder = liveOrders[liveOrders.length - 1];
+        const badge = document.getElementById('orderRefDisplay');
+        if (badge) {
+          badge.textContent = `Order Reference: ${latestOrder.ref}`;
+        }
+      }
+    });
+  </script>
 
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AMK Clothing - Secure Payment</title>
+  <title>AMK Clothing - Secure Payment Gateway</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -42,10 +42,20 @@
       margin-bottom: 25px;
       font-weight: 600;
     }
-    .breadcrumb span {
-      color: #227b75;
+    .breadcrumb a {
+      color: #64748b;
+      text-decoration: none;
+      transition: color 0.2s;
     }
-    .payment-card {
+    .breadcrumb a:hover {
+      color: #227b75;
+      text-decoration: underline;
+    }
+    .breadcrumb .active-step {
+      color: #227b75;
+      font-weight: 800;
+    }
+    .checkout-card {
       background: #ffffff;
       border: 1px solid #e2e8f0;
       border-radius: 10px;
@@ -56,40 +66,48 @@
       margin-top: 0;
       font-weight: 900;
       font-size: 22px;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
-    .order-total-badge {
-      background-color: #f1f5f9;
-      border-left: 4px solid #227b75;
-      padding: 12px 16px;
-      font-weight: bold;
-      font-size: 16px;
+    .subtitle {
+      font-size: 13px;
+      color: #64748b;
       margin-bottom: 25px;
+    }
+    .amount-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 14px 20px;
       display: flex;
       justify-content: space-between;
-    }
-    .method-tabs {
-      display: flex;
-      gap: 10px;
+      align-items: center;
+      font-weight: bold;
       margin-bottom: 20px;
     }
-    .tab-btn {
-      flex: 1;
+    .amount-val {
+      color: #227b75;
+      font-size: 18px;
+    }
+    .payment-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .pay-tab {
       padding: 12px;
       border: 1px solid #cbd5e1;
       background: #ffffff;
       border-radius: 6px;
-      cursor: pointer;
       font-weight: bold;
       font-size: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
     }
-    .tab-btn.active {
+    .pay-tab.active {
       border-color: #227b75;
-      background-color: #f0fdfa;
+      background: #f0fdf4;
       color: #227b75;
     }
     .form-group {
@@ -134,15 +152,6 @@
     .btn-pay:hover {
       background-color: #1a5e59;
     }
-    .eft-box {
-      display: none;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      padding: 18px;
-      border-radius: 8px;
-      font-size: 13px;
-      line-height: 1.6;
-    }
   </style>
 </head>
 <body>
@@ -158,47 +167,49 @@
 
   <div class="container">
     <div class="breadcrumb">
-      Cart > Place Order > <span>Pay</span> > Order Complete
+      <a href="cart.html">Cart</a> &gt; 
+      <a href="place-order.html">Place Order</a> &gt; 
+      <span class="active-step">Pay</span> &gt; 
+      <a href="order-complete.html">Order Complete</a>
     </div>
 
-    <div class="payment-card">
+    <div class="checkout-card">
       <h2>Secure Payment Gateway</h2>
-      <p style="font-size:13px; color:#64748b; margin-top:0; margin-bottom:15px;">Complete your transaction to finalize your tailored order.</p>
+      <div class="subtitle">Complete your transaction to finalize your tailored order.</div>
 
-      <div class="order-total-badge">
+      <div class="amount-box">
         <span>Amount Payable:</span>
-        <span style="color:#227b75;">R 770.00</span>
+        <span class="amount-val">R 770.00</span>
       </div>
 
-      <div class="method-tabs">
-        <button class="tab-btn active" id="btnCard" onclick="showTab('card')">
+      <div class="payment-tabs">
+        <button type="button" class="pay-tab active" onclick="setPaymentMethod('card')">
           <i class="fa-solid fa-credit-card"></i> Card Payment
         </button>
-        <button class="tab-btn" id="btnEFT" onclick="showTab('eft')">
+        <button type="button" class="pay-tab" onclick="setPaymentMethod('eft')">
           <i class="fa-solid fa-building-columns"></i> Instant EFT
         </button>
       </div>
 
-      <!-- CARD PAYMENT FORM -->
-      <form id="cardForm" onsubmit="handleCompletePayment(event)">
+      <form onsubmit="handleCompletePayment(event)">
         <div class="form-group">
           <label>Cardholder Name</label>
-          <input type="text" value="Latecia Ratshiedana" required>
+          <input type="text" id="cardName" value="Latecia Ratshiedana" required>
         </div>
 
         <div class="form-group">
           <label>Card Number</label>
-          <input type="text" placeholder="4242 •••• •••• 4242" required>
+          <input type="text" id="cardNumber" value="4242 •••• •••• 4242" required>
         </div>
 
         <div class="row">
           <div class="form-group">
             <label>Expiry Date</label>
-            <input type="text" placeholder="MM/YY" required>
+            <input type="text" placeholder="MM/YY" value="08/28" required>
           </div>
           <div class="form-group">
             <label>CVV</label>
-            <input type="text" placeholder="123" required>
+            <input type="text" placeholder="123" value="456" required>
           </div>
         </div>
 
@@ -206,48 +217,18 @@
           Pay R 770.00 Now <i class="fa-solid fa-lock"></i>
         </button>
       </form>
-
-      <!-- EFT DETAILS FORM -->
-      <div id="eftBox" class="eft-box">
-        <h4 style="margin-top:0;">AMK Clothing Banking Details:</h4>
-        <p style="margin:4px 0;"><strong>Bank:</strong> First National Bank (FNB)</p>
-        <p style="margin:4px 0;"><strong>Account Holder:</strong> AMK Clothing Studio</p>
-        <p style="margin:4px 0;"><strong>Account Number:</strong> 62890123456</p>
-        <p style="margin:4px 0;"><strong>Branch Code:</strong> 250655</p>
-        <p style="margin:4px 0;"><strong>Reference:</strong> AMK-8891</p>
-        
-        <form onsubmit="handleCompletePayment(event)" style="margin-top:15px;">
-          <div class="form-group">
-            <label>Upload Proof of Payment (POP)</label>
-            <input type="file" required style="padding:8px;">
-          </div>
-          <button type="submit" class="btn-pay">
-            Submit Proof of Payment <i class="fa-solid fa-check"></i>
-          </button>
-        </form>
-      </div>
-
     </div>
   </div>
 
   <script>
-    function showTab(type) {
-      if(type === 'card') {
-        document.getElementById('cardForm').style.display = 'block';
-        document.getElementById('eftBox').style.display = 'none';
-        document.getElementById('btnCard').classList.add('active');
-        document.getElementById('btnEFT').classList.remove('active');
-      } else {
-        document.getElementById('cardForm').style.display = 'none';
-        document.getElementById('eftBox').style.display = 'block';
-        document.getElementById('btnEFT').classList.add('active');
-        document.getElementById('btnCard').classList.remove('active');
-      }
+    function setPaymentMethod(method) {
+      document.querySelectorAll('.pay-tab').forEach(t => t.classList.remove('active'));
+      event.currentTarget.classList.add('active');
     }
 
     function handleCompletePayment(e) {
       e.preventDefault();
-      alert("Payment successful! Redirecting to Order Confirmation.");
+      alert("Payment processed successfully!");
       window.location.href = "order-complete.html";
     }
   </script>

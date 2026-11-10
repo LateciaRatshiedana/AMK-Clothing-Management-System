@@ -201,8 +201,35 @@
       font-size: 12px;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 5px;
+      margin-top: 8px;
       display: inline-block;
+    }
+
+    /* CLICKABLE SIZE PILLS */
+    .size-pills-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .size-pill {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      color: #334155;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+
+    .size-pill.selected {
+      background: #227b75;
+      color: #ffffff;
+      border-color: #227b75;
     }
 
     .measurement-grid {
@@ -288,9 +315,19 @@
           <input type="text" id="invPrice" required style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box;">
         </div>
         
+        <!-- CLICKABLE AVAILABLE SIZES -->
         <div style="margin-bottom:12px;">
-          <label style="font-size:12px; font-weight:bold;">Available Sizes (Comma Separated)</label>
-          <input type="text" id="invSizes" placeholder="S, M, L, XL, Custom Fit" required style="width:100%; padding:9px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box;">
+          <label style="font-size:12px; font-weight:bold;">Select Available Sizes (Click to Add)</label>
+          <div class="size-pills-wrapper">
+            <span class="size-pill" onclick="toggleSizePill(this, 'XS')">XS</span>
+            <span class="size-pill selected" onclick="toggleSizePill(this, 'S')">S</span>
+            <span class="size-pill selected" onclick="toggleSizePill(this, 'M')">M</span>
+            <span class="size-pill selected" onclick="toggleSizePill(this, 'L')">L</span>
+            <span class="size-pill selected" onclick="toggleSizePill(this, 'XL')">XL</span>
+            <span class="size-pill" onclick="toggleSizePill(this, '2XL')">2XL</span>
+            <span class="size-pill selected" onclick="toggleSizePill(this, 'Custom Fit')">Custom Fit</span>
+          </div>
+          <input type="hidden" id="invSizes" value="S, M, L, XL, Custom Fit">
           
           <button type="button" class="add-extra-btn" onclick="toggleMeasurementFields()">+ Add Specific Sizing (Bust, Waist, Hips)</button>
 
@@ -314,12 +351,13 @@
           </div>
         </div>
 
+        <!-- FILE UPLOAD INPUTS -->
         <div style="margin-bottom:18px;">
-          <label style="font-size:12px; font-weight:bold;">Image Paths / Multi-Angle Views (Up to 7)</label>
-          <p style="font-size:11px; color:#64748b; margin:2px 0 8px 0;">Leave blank to publish without images, or add view angles.</p>
+          <label style="font-size:12px; font-weight:bold;">Upload Garment Images (From Device)</label>
+          <p style="font-size:11px; color:#64748b; margin:2px 0 8px 0;">Select image files from your computer to upload.</p>
           
           <div id="imageInputsContainer">
-            <input type="text" class="inv-img-field" placeholder="Angle 1 (Main View) - e.g. Images/Outfit_Pics/dress1.jpg" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; margin-bottom:6px;">
+            <input type="file" accept="image/*" class="inv-img-file" required style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; margin-bottom:6px; background:#f8fafc;">
           </div>
 
           <button type="button" class="add-extra-btn" onclick="addExtraAngleField()">+ Add Another Angle View</button>
@@ -355,11 +393,23 @@
 
   <script>
     let currentAngleCount = 1;
+    let selectedSizes = ['S', 'M', 'L', 'XL', 'Custom Fit'];
 
     const defaultItems = [
       { id: 1, title: 'Signature Curve Tailored Evening Gown', category: 'Curve', price: 'R 1,850.00', inStock: true, images: ['Images/Outfit_Pics/WomanCurvedress.jpg'] },
       { id: 2, title: 'Signature Petite Tailored Evening Dress', category: 'Petite', price: 'R 1,650.00', inStock: true, images: ['Images/Outfit_Pics/WomanPetitedress.jpg'] }
     ];
+
+    function toggleSizePill(element, size) {
+      if (element.classList.contains('selected')) {
+        element.classList.remove('selected');
+        selectedSizes = selectedSizes.filter(s => s !== size);
+      } else {
+        element.classList.add('selected');
+        selectedSizes.push(size);
+      }
+      document.getElementById('invSizes').value = selectedSizes.join(', ');
+    }
 
     function openAddModal() {
       document.getElementById('addItemModal').style.display = 'flex';
@@ -382,10 +432,10 @@
       currentAngleCount++;
       const container = document.getElementById('imageInputsContainer');
       const newInput = document.createElement('input');
-      newInput.type = 'text';
-      newInput.className = 'inv-img-field';
-      newInput.placeholder = `Angle ${currentAngleCount} View Path...`;
-      newInput.style.cssText = 'width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; margin-bottom:6px;';
+      newInput.type = 'file';
+      newInput.accept = 'image/*';
+      newInput.className = 'inv-img-file';
+      newInput.style.cssText = 'width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; margin-bottom:6px; background:#f8fafc;';
       container.appendChild(newInput);
     }
 
@@ -466,22 +516,47 @@
       const title = document.getElementById('invTitle').value;
       const category = document.getElementById('invCategory').value;
       const price = document.getElementById('invPrice').value;
+      const sizes = document.getElementById('invSizes').value;
 
-      const imgInputs = document.querySelectorAll('.inv-img-field');
+      const fileInputs = document.querySelectorAll('.inv-img-file');
       const images = [];
-      imgInputs.forEach(input => {
-        if (input.value.trim() !== '') {
-          images.push(input.value.trim());
+      let filesProcessed = 0;
+      let totalFiles = 0;
+
+      fileInputs.forEach(input => {
+        if (input.files && input.files[0]) {
+          totalFiles++;
         }
       });
 
-      const newItem = { id: Date.now(), title, category, price, inStock: true, images };
+      if (totalFiles === 0) {
+        saveItemWithImages(title, category, price, sizes, []);
+        return;
+      }
+
+      fileInputs.forEach(input => {
+        if (input.files && input.files[0]) {
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            images.push(event.target.result);
+            filesProcessed++;
+            if (filesProcessed === totalFiles) {
+              saveItemWithImages(title, category, price, sizes, images);
+            }
+          };
+          reader.readAsDataURL(input.files[0]);
+        }
+      });
+    }
+
+    function saveItemWithImages(title, category, price, sizes, images) {
+      const newItem = { id: Date.now(), title, category, price, sizes, inStock: true, images };
 
       let items = JSON.parse(localStorage.getItem('amk_inventory')) || [];
       items.push(newItem);
       localStorage.setItem('amk_inventory', JSON.stringify(items));
 
-      alert(`Garment "${title}" recorded and published!`);
+      alert(`Garment "${title}" recorded with sizes (${sizes})!`);
       closeModal('addItemModal');
       loadInventory();
     }

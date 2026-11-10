@@ -6,6 +6,18 @@
   <title>AMK Clothing - Client Sign In</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .error-msg {
+      color: #e53e3e;
+      font-size: 11px;
+      margin-top: 4px;
+      display: none;
+      font-weight: 600;
+    }
+    .input-error {
+      border-color: #e53e3e !important;
+    }
+  </style>
 </head>
 <body class="page-center">
 
@@ -23,11 +35,13 @@
       <div class="form-group">
         <label>Email Address</label>
         <input type="email" id="clientEmailInput" value="latecia@rosebank.co.za" required>
+        <div class="error-msg" id="loginEmailError">Enter a valid email address.</div>
       </div>
 
       <div class="form-group">
         <label>Password</label>
         <input type="password" id="clientPasswordInput" value="password123" required>
+        <div class="error-msg" id="loginPasswordError">Password must be at least 6 characters.</div>
       </div>
 
       <button type="submit" class="primary-btn" style="margin-top: 10px;">
@@ -50,19 +64,46 @@
     function handleClientLogin(event) {
       event.preventDefault(); // Stop default form reload
 
-      const email = document.getElementById('clientEmailInput').value;
-      // Extract a clean display name from the email (e.g. "latecia@rosebank.co.za" becomes "Latecia")
-      let namePart = email.split('@')[0];
-      let formattedName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+      const email = document.getElementById('clientEmailInput').value.trim();
+      const password = document.getElementById('clientPasswordInput').value;
+      const emailRegex = /^[a-zA-Z0-9._%+-]{3,}@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-      // Save login state in localStorage
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('userType', 'client');
-      localStorage.setItem('userName', formattedName);
-      localStorage.setItem('userEmail', email);
+      let isValid = true;
 
-      // Immediately redirect straight to index.html storefront to see clothes and items
-      window.location.href = 'index.html';
+      // Validate email format
+      if (!emailRegex.test(email)) {
+        document.getElementById('clientEmailInput').classList.add('input-error');
+        document.getElementById('loginEmailError').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('clientEmailInput').classList.remove('input-error');
+        document.getElementById('loginEmailError').style.display = 'none';
+      }
+
+      // Validate password length
+      if (password.length < 6) {
+        document.getElementById('clientPasswordInput').classList.add('input-error');
+        document.getElementById('loginPasswordError').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('clientPasswordInput').classList.remove('input-error');
+        document.getElementById('loginPasswordError').style.display = 'none';
+      }
+
+      if (isValid) {
+        // Extract display name from email
+        let namePart = email.split('@')[0];
+        let formattedName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+
+        // Save login state in localStorage
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('userType', 'client');
+        localStorage.setItem('userName', formattedName);
+        localStorage.setItem('userEmail', email);
+
+        // Immediately redirect straight to index.html storefront
+        window.location.href = 'index.html';
+      }
     }
   </script>
 </body>

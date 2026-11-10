@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMK Clothing - My Orders &amp; Tracking</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { background-color: #f8fafc; margin: 0; font-family: Arial, sans-serif; color: #0f172a; }
+    .store-header { background-color: #000000; color: #ffffff; padding: 16px 30px; display: flex; justify-content: space-between; align-items: center; }
+    .store-logo { font-size: 20px; font-weight: 900; letter-spacing: 1px; color: #ffffff; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+    .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+    h2 { font-weight: 900; font-size: 24px; margin-bottom: 5px; }
+    p.subtitle { color: #64748b; font-size: 14px; margin-bottom: 30px; }
+    
+    /* Status pill styles */
+    .status-pill { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 800; }
+    .status-pending { background: #fef3c7; color: #92400e; }
+    .status-production { background: #e0f2fe; color: #075985; }
+    .status-ready { background: #dcfce7; color: #166534; }
+  </style>
+</head>
+<body>
+
+  <header class="store-header">
+    <a href="index.html" class="store-logo">
+      <i class="fa-solid fa-scissors" style="color: #227b75;"></i> AMK CLOTHING
+    </a>
+    <a href="index.html" style="color: #ffffff; text-decoration: none; font-size: 13px; font-weight: bold;">
+      &larr; Back to Storefront
+    </a>
+  </header>
+
+  <div class="container">
+    <h2>My Tracked Orders</h2>
+    <p class="subtitle">View real-time tailoring progress for all your bespoke and catalog garments.</p>
+
+    <!-- THIS CONTAINER WILL AUTOMATICALLY POPULATE USING script.js -->
+    <div id="clientOrdersContainer">
+      <p style="color:#64748b; text-align:center;">Loading your orders...</p>
+    </div>
+  </div>
+
+  <!-- Link your master script -->
+  <script src="script.js"></script>
+</body>
+</html>

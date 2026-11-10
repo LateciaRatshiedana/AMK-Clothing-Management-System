@@ -6,6 +6,18 @@
   <title>AMK Clothing - Client Sign Up</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .error-msg {
+      color: #e53e3e;
+      font-size: 11px;
+      margin-top: 4px;
+      display: none;
+      font-weight: 600;
+    }
+    .input-error {
+      border-color: #e53e3e !important;
+    }
+  </style>
 </head>
 <body class="page-center">
 
@@ -18,35 +30,41 @@
       <p>Create Your Client Account</p>
     </div>
 
-    <form action="client-login.html" method="GET" onsubmit="event.preventDefault(); alert('Account created successfully! Please sign in.'); window.location.href='client-login.html';">
+    <form id="signupForm" onsubmit="validateSignup(event)">
       <div class="form-group">
         <label>Name</label>
-        <input type="text" required placeholder="Enter your name">
+        <input type="text" id="nameInput" required placeholder="Enter your name">
+        <div class="error-msg" id="nameError">Name must contain at least 2 letters.</div>
       </div>
 
       <div class="form-group">
         <label>Surname</label>
-        <input type="text" required placeholder="Enter your surname">
+        <input type="text" id="surnameInput" required placeholder="Enter your surname">
+        <div class="error-msg" id="surnameError">Surname must contain at least 2 letters.</div>
       </div>
 
       <div class="form-group">
         <label>Phone Number</label>
-        <input type="tel" required placeholder="Enter your phone number">
+        <input type="tel" id="phoneInput" required placeholder="Enter your phone number">
+        <div class="error-msg" id="phoneError">Enter a valid 10-digit phone number.</div>
       </div>
 
       <div class="form-group">
         <label>Email Address</label>
-        <input type="email" required placeholder="Enter your email">
+        <input type="email" id="emailInput" required placeholder="Enter your email">
+        <div class="error-msg" id="emailError">Invalid email format (e.g. t@gmail.com is not allowed).</div>
       </div>
 
       <div class="form-group">
         <label>Password</label>
-        <input type="password" required placeholder="Create a password">
+        <input type="password" id="passwordInput" required placeholder="Create a password">
+        <div class="error-msg" id="passwordError">Password must be at least 8 chars, include uppercase, lowercase, number & special char.</div>
       </div>
 
       <div class="form-group">
         <label>Confirm Password</label>
-        <input type="password" required placeholder="Confirm your password">
+        <input type="password" id="confirmPasswordInput" required placeholder="Confirm your password">
+        <div class="error-msg" id="confirmPasswordError">Passwords do not match.</div>
       </div>
 
       <button type="submit" class="primary-btn">Sign Up</button>
@@ -58,6 +76,96 @@
 
     <a href="login-selection.html" class="close-modal-text" style="display: block; text-align: center; margin-top: 15px; text-decoration: none;">← Back to Portal Selection</a>
   </div>
+
+  <script>
+    function validateSignup(event) {
+      // ALWAYS stop default submission first
+      event.preventDefault();
+      let isValid = true;
+
+      const name = document.getElementById('nameInput');
+      const surname = document.getElementById('surnameInput');
+      const phone = document.getElementById('phoneInput');
+      const email = document.getElementById('emailInput');
+      const password = document.getElementById('passwordInput');
+      const confirmPassword = document.getElementById('confirmPasswordInput');
+
+      // Strict email validation: requires at least 4 characters before @ (blocks t@gmail.com, a@b.com)
+      const emailValue = email.value.trim();
+      const emailRegex = /^[a-zA-Z0-9._%+-]{4,}@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+      const phoneRegex = /^(\+27|0)[0-9]{9}$/;
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+      // 1. Validate Name
+      if (name.value.trim().length < 2) {
+        showError('nameInput', 'nameError');
+        isValid = false;
+      } else {
+        clearError('nameInput', 'nameError');
+      }
+
+      // 2. Validate Surname
+      if (surname.value.trim().length < 2) {
+        showError('surnameInput', 'surnameError');
+        isValid = false;
+      } else {
+        clearError('surnameInput', 'surnameError');
+      }
+
+      // 3. Validate Phone
+      if (!phoneRegex.test(phone.value.trim())) {
+        showError('phoneInput', 'phoneError');
+        isValid = false;
+      } else {
+        clearError('phoneInput', 'phoneError');
+      }
+
+      // 4. Validate Email (specifically blocks short/fake emails like t@gmail.com)
+      if (!emailRegex.test(emailValue)) {
+        showError('emailInput', 'emailError');
+        isValid = false;
+      } else {
+        clearError('emailInput', 'emailError');
+      }
+
+      // 5. Validate Password Strength
+      if (!passwordRegex.test(password.value)) {
+        showError('passwordInput', 'passwordError');
+        isValid = false;
+      } else {
+        clearError('passwordInput', 'passwordError');
+      }
+
+      // 6. Validate Password Match (THIS STOPS THE BUG FROM THE SCREENSHOT)
+      if (password.value !== confirmPassword.value || confirmPassword.value === '') {
+        showError('confirmPasswordInput', 'confirmPasswordError');
+        isValid = false;
+      } else {
+        clearError('confirmPasswordInput', 'confirmPasswordError');
+      }
+
+      // IF EVERYTHING IS 100% VALID, THEN PROCEED
+      if (isValid) {
+        localStorage.setItem('registeredEmail', emailValue);
+        localStorage.setItem('registeredPassword', password.value);
+        localStorage.setItem('registeredName', name.value.trim());
+        
+        alert('Account created successfully! Please sign in.');
+        window.location.href = 'client-login.html';
+      }
+    }
+
+    function showError(inputId, errorId) {
+      document.getElementById(inputId).classList.add('input-error');
+      document.getElementById(errorId).style.display = 'block';
+    }
+
+    function clearError(inputId, errorId) {
+      document.getElementById(inputId).classList.remove('input-error');
+      document.getElementById(errorId).style.display = 'none';
+    }
+  </script>
 
 </body>
 </html>

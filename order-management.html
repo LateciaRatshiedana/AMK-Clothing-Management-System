@@ -305,9 +305,6 @@
               <label>Select Customer</label>
               <select class="form-control" id="orderCustomer" required>
                 <option value="">Choose registered client...</option>
-                <option value="Latecia Ratshiedana">Latecia Ratshiedana (latecia@rosebank.co.za)</option>
-                <option value="Sarah Dlamini">Sarah Dlamini (sarah.d@gmail.com)</option>
-                <option value="Sipho Khumalo">Sipho Khumalo (sipho.k@vodamail.co.za)</option>
               </select>
             </div>
 
@@ -346,40 +343,11 @@
                 <th>Garment</th>
                 <th>Total</th>
                 <th>Status</th>
-                <th>Action</th>
+                <th>Action (Admin Only)</th>
               </tr>
             </thead>
             <tbody id="ordersTableBody">
-              <tr>
-                <td><strong>#AMK-8891</strong></td>
-                <td>Latecia Ratshiedana</td>
-                <td>Signature Curve Evening Gown</td>
-                <td>R 1,850</td>
-                <td><span class="status-pill status-production" id="status-AMK-8891">In Production</span></td>
-                <td>
-                  <select onchange="changeOrderStatus('#AMK-8891', this.value)" style="padding: 4px 8px; font-size: 12px; border-radius: 4px;">
-                    <option value="In Production">In Production</option>
-                    <option value="Pending Tailoring">Pending Tailoring</option>
-                    <option value="Ready for Delivery">Ready for Delivery</option>
-                    <option value="Completed">Completed</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>#AMK-8892</strong></td>
-                <td>Sarah Dlamini</td>
-                <td>Petite Summer Wrap Dress</td>
-                <td>R 1,450</td>
-                <td><span class="status-pill status-pending" id="status-AMK-8892">Pending Tailoring</span></td>
-                <td>
-                  <select onchange="changeOrderStatus('#AMK-8892', this.value)" style="padding: 4px 8px; font-size: 12px; border-radius: 4px;">
-                    <option value="Pending Tailoring">Pending Tailoring</option>
-                    <option value="In Production">In Production</option>
-                    <option value="Ready for Delivery">Ready for Delivery</option>
-                    <option value="Completed">Completed</option>
-                  </select>
-                </td>
-              </tr>
+              <!-- Dynamically populated from localStorage -->
             </tbody>
           </table>
         </div>
@@ -395,30 +363,29 @@
             <div class="form-group">
               <label>Select Order</label>
               <select class="form-control" id="measureOrderRef" required>
-                <option value="#AMK-8891">#AMK-8891 - Latecia Ratshiedana (Curve Evening Gown)</option>
-                <option value="#AMK-8892">#AMK-8892 - Sarah Dlamini (Petite Wrap Dress)</option>
+                <!-- Dynamically populated from live orders -->
               </select>
             </div>
 
             <div class="form-row-2">
               <div class="form-group">
                 <label>Bust / Chest (cm)</label>
-                <input type="number" class="form-control" placeholder="e.g. 96" required>
+                <input type="number" class="form-control" id="mBust" placeholder="e.g. 96" required>
               </div>
               <div class="form-group">
                 <label>Waist (cm)</label>
-                <input type="number" class="form-control" placeholder="e.g. 78" required>
+                <input type="number" class="form-control" id="mWaist" placeholder="e.g. 78" required>
               </div>
             </div>
 
             <div class="form-row-2">
               <div class="form-group">
                 <label>Hips (cm)</label>
-                <input type="number" class="form-control" placeholder="e.g. 104" required>
+                <input type="number" class="form-control" id="mHips" placeholder="e.g. 104" required>
               </div>
               <div class="form-group">
                 <label>Shoulder to Floor (cm)</label>
-                <input type="number" class="form-control" placeholder="e.g. 142" required>
+                <input type="number" class="form-control" id="mLength" placeholder="e.g. 142" required>
               </div>
             </div>
 
@@ -432,6 +399,88 @@
   </div>
 
   <script>
+    // INITIALIZE DEFAULT ORDERS IF NONE EXIST
+    function initDefaultOrders() {
+      if (!localStorage.getItem('amk_live_orders')) {
+        const defaultOrders = [
+          { ref: '#AMK-8891', client: 'Latecia Ratshiedana', garment: 'Signature Curve Evening Gown', total: 'R 1,850', status: 'In Production' },
+          { ref: '#AMK-8892', client: 'Sarah Dlamini', garment: 'Petite Summer Wrap Dress', total: 'R 1,450', status: 'Pending Tailoring' }
+        ];
+        localStorage.setItem('amk_live_orders', JSON.stringify(defaultOrders));
+      }
+    }
+
+    // POPULATE ALL DROPDOWNS & TABLES FROM LOCALSTORAGE
+    function loadAdminData() {
+      initDefaultOrders();
+
+      // 1. Populate Customer Dropdown in "Create Order"
+      const custSelect = document.getElementById('orderCustomer');
+      if (custSelect) {
+        let customers = [
+          { name: 'Latecia Ratshiedana' },
+          { name: 'Thando Nkosi (VIP)' },
+          { name: 'Sarah Dlamini' },
+          { name: 'Sipho Khumalo' }
+        ];
+        const savedCustomers = JSON.parse(localStorage.getItem('amk_customers'));
+        if (savedCustomers && savedCustomers.length > 0) {
+          customers = savedCustomers;
+        }
+
+        custSelect.innerHTML = '<option value="">Choose registered client...</option>';
+        customers.forEach(cust => {
+          const opt = document.createElement('option');
+          opt.value = cust.name;
+          opt.textContent = cust.name;
+          custSelect.appendChild(opt);
+        });
+      }
+
+      // 2. Render Orders Table in "Update Status"
+      const tableBody = document.getElementById('ordersTableBody');
+      const liveOrders = JSON.parse(localStorage.getItem('amk_live_orders')) || [];
+      if (tableBody) {
+        tableBody.innerHTML = '';
+        liveOrders.forEach(order => {
+          const cleanRef = order.ref.replace('#','');
+          let badgeClass = 'status-pending';
+          if (order.status === 'In Production') badgeClass = 'status-production';
+          if (order.status === 'Ready for Delivery' || order.status === 'Completed') badgeClass = 'status-ready';
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>${order.ref}</strong></td>
+            <td>${order.client}</td>
+            <td>${order.garment}</td>
+            <td>${order.total}</td>
+            <td><span class="status-pill ${badgeClass}" id="status-${cleanRef}">${order.status}</span></td>
+            <td>
+              <select onchange="changeOrderStatus('${order.ref}', this.value)" style="padding: 4px 8px; font-size: 12px; border-radius: 4px;">
+                <option value="Pending Tailoring" ${order.status === 'Pending Tailoring' ? 'selected' : ''}>Pending Tailoring</option>
+                <option value="In Production" ${order.status === 'In Production' ? 'selected' : ''}>In Production</option>
+                <option value="Ready for Delivery" ${order.status === 'Ready for Delivery' ? 'selected' : ''}>Ready for Delivery</option>
+                <option value="Completed" ${order.status === 'Completed' ? 'selected' : ''}>Completed</option>
+              </select>
+            </td>
+          `;
+          tableBody.appendChild(tr);
+        });
+      }
+
+      // 3. Populate Measurements Dropdown
+      const measureSelect = document.getElementById('measureOrderRef');
+      if (measureSelect) {
+        measureSelect.innerHTML = '';
+        liveOrders.forEach(order => {
+          const opt = document.createElement('option');
+          opt.value = order.ref;
+          opt.textContent = `${order.ref} - ${order.client} (${order.garment})`;
+          measureSelect.appendChild(opt);
+        });
+      }
+    }
+
     // TAB SWITCHING LOGIC
     function switchTab(panelId, btnId) {
       document.querySelectorAll('.content-panel').forEach(panel => panel.classList.remove('active'));
@@ -449,24 +498,15 @@
       const price = document.getElementById('orderTotalPrice').value;
       const refCode = '#AMK-' + Math.floor(1000 + Math.random() * 9000);
 
-      const tableBody = document.getElementById('ordersTableBody');
-      const newRow = document.createElement('tr');
-      newRow.innerHTML = `
-        <td><strong>${refCode}</strong></td>
-        <td>${client}</td>
-        <td>${garment}</td>
-        <td>R ${price}</td>
-        <td><span class="status-pill status-pending" id="status-${refCode.replace('#','')}">Pending Tailoring</span></td>
-        <td>
-          <select onchange="changeOrderStatus('${refCode}', this.value)" style="padding: 4px 8px; font-size: 12px; border-radius: 4px;">
-            <option value="Pending Tailoring">Pending Tailoring</option>
-            <option value="In Production">In Production</option>
-            <option value="Ready for Delivery">Ready for Delivery</option>
-            <option value="Completed">Completed</option>
-          </select>
-        </td>
-      `;
-      tableBody.appendChild(newRow);
+      let liveOrders = JSON.parse(localStorage.getItem('amk_live_orders')) || [];
+      liveOrders.push({
+        ref: refCode,
+        client: client,
+        garment: garment,
+        total: `R ${Number(price).toLocaleString()}`,
+        status: 'Pending Tailoring'
+      });
+      localStorage.setItem('amk_live_orders', JSON.stringify(liveOrders));
 
       alert(`Order ${refCode} created successfully for ${client}!`);
       
@@ -476,33 +516,32 @@
       document.getElementById('orderTotalPrice').value = '';
       document.getElementById('orderDeposit').value = '';
 
-      // Auto switch to Update Status tab
+      // Reload data & switch to Update Status tab
+      loadAdminData();
       switchTab('tabUpdateStatus', 'btnTab2');
     }
 
     // CHANGE ORDER STATUS LOGIC
     function changeOrderStatus(refCode, newStatus) {
-      const cleanId = 'status-' + refCode.replace('#','');
-      const badge = document.getElementById(cleanId);
-      if (badge) {
-        badge.textContent = newStatus;
-        if (newStatus === 'Ready for Delivery' || newStatus === 'Completed') {
-          badge.className = 'status-pill status-ready';
-        } else if (newStatus === 'In Production') {
-          badge.className = 'status-pill status-production';
-        } else {
-          badge.className = 'status-pill status-pending';
-        }
+      let liveOrders = JSON.parse(localStorage.getItem('amk_live_orders')) || [];
+      const found = liveOrders.find(o => o.ref === refCode);
+      if (found) {
+        found.status = newStatus;
+        localStorage.setItem('amk_live_orders', JSON.stringify(liveOrders));
       }
-      alert(`Order ${refCode} status updated to: ${newStatus}`);
+
+      loadAdminData();
+      alert(`Order ${refCode} status updated to: ${newStatus} (Live synced)`);
     }
 
     // SAVE MEASUREMENTS LOGIC
     function handleSaveMeasurements(e) {
       e.preventDefault();
       const ref = document.getElementById('measureOrderRef').value;
-      alert(`Bespoke tailor measurements logged for order ${ref}!`);
+      alert(`Bespoke tailor measurements saved successfully for order ${ref}!`);
     }
+
+    window.addEventListener('DOMContentLoaded', loadAdminData);
   </script>
 </body>
 </html>

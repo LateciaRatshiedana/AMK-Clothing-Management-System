@@ -3,262 +3,182 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AMK CLOTHING - Bespoke Tailoring & Fashion</title>
+  <title>AMK Clothing - Tailor Live Support</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* TAILORING WORKSHOP BANNER STYLES */
-    .workshop-banner-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      overflow: hidden;
-      display: grid;
-      grid-template-columns: 340px 1fr;
-      gap: 24px;
-      margin-bottom: 30px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-    }
+    body { background-color: #f8fafc; margin: 0; font-family: Arial, sans-serif; color: #0f172a; }
+    .store-header { background-color: #000000; color: #ffffff; padding: 16px 30px; display: flex; justify-content: space-between; align-items: center; }
+    .store-logo { font-size: 20px; font-weight: 900; letter-spacing: 1px; color: #ffffff; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+    .chat-container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+    .chat-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; height: 600px; position: relative; }
+    .chat-header { background: #0f172a; color: #ffffff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .chat-title { font-weight: 800; font-size: 16px; display: flex; align-items: center; gap: 10px; }
+    .status-badge { font-size: 12px; color: #4ade80; display: flex; align-items: center; gap: 6px; }
+    .chat-box { flex: 1; padding: 20px; overflow-y: auto; background: #f8fafc; display: flex; flex-direction: column; gap: 12px; }
+    
+    .msg { max-width: 75%; padding: 12px 16px; border-radius: 10px; font-size: 14px; line-height: 1.4; position: relative; }
+    .msg-tailor { background: #ffffff; border: 1px solid #e2e8f0; align-self: flex-start; color: #0f172a; }
+    .msg-client { background: #227b75; color: #ffffff; align-self: flex-end; }
+    .msg-time { font-size: 10px; margin-top: 4px; opacity: 0.8; text-align: right; }
+    .deleted-msg { font-style: italic; opacity: 0.7; color: #cbd5e1 !important; background: #334155 !important; border: 1px dashed #64748b !important; }
+    
+    .msg-actions { margin-top: 6px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.2); display: flex; justify-content: flex-end; gap: 8px; }
+    .action-btn { background: rgba(0,0,0,0.25); color: #fff; border: none; padding: 2px 8px; border-radius: 4px; font-size: 10px; cursor: pointer; font-weight: bold; }
+    .action-btn:hover { background: rgba(0,0,0,0.45); }
+    .action-btn-del { background: rgba(239, 68, 68, 0.8); }
+    .action-btn-del:hover { background: rgba(220, 38, 38, 1); }
 
-    @media (max-width: 768px) {
-      .workshop-banner-card {
-        grid-template-columns: 1fr;
-      }
-    }
+    .chat-footer { padding: 15px 20px; background: #ffffff; border-top: 1px solid #e2e8f0; display: flex; gap: 10px; }
+    .chat-input { flex: 1; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; font-size: 14px; }
+    .send-btn { background: #227b75; color: #ffffff; border: none; padding: 0 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px; }
 
-    .workshop-img-box {
-      width: 100%;
-      height: 100%;
-      min-height: 220px;
-    }
-
-    .workshop-img-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .workshop-text-box {
-      padding: 24px 28px 24px 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    @media (max-width: 768px) {
-      .workshop-text-box {
-        padding: 0 20px 24px 20px;
-      }
-    }
-
-    .workshop-tag {
-      display: inline-block;
-      background: #e6f4f3;
-      color: #227b75;
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      padding: 4px 10px;
-      border-radius: 12px;
-      margin-bottom: 10px;
-      width: fit-content;
-    }
-
-    .workshop-heading {
-      font-size: 22px;
-      font-weight: 900;
-      color: #0f172a;
-      margin: 0 0 8px 0;
-    }
-
-    .workshop-desc {
-      font-size: 14px;
-      color: #475569;
-      line-height: 1.6;
-      margin: 0 0 16px 0;
-    }
-
-    .chat-tailor-btn {
-      background-color: #227b75;
-      color: #ffffff;
-      border: none;
-      padding: 12px 22px;
-      border-radius: 6px;
-      font-weight: bold;
-      font-size: 13px;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      width: fit-content;
-      transition: background-color 0.2s ease;
-    }
-
-    .chat-tailor-btn:hover {
-      background-color: #1a5e59;
-    }
+    /* EDIT MODAL */
+    .modal-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); display: none; align-items: center; justify-content: center; z-index: 100; }
+    .modal-box { background: #fff; border-radius: 8px; padding: 20px; width: 85%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+    .modal-box h3 { margin-top: 0; font-size: 16px; margin-bottom: 12px; }
+    .modal-box input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; margin-bottom: 15px; outline: none; }
+    .modal-btns { display: flex; justify-content: flex-end; gap: 8px; }
+    .modal-btn { padding: 8px 14px; border-radius: 4px; border: none; font-weight: bold; font-size: 12px; cursor: pointer; }
+    .btn-save { background: #227b75; color: #fff; }
+    .btn-cancel { background: #e2e8f0; color: #0f172a; }
   </style>
 </head>
 <body>
 
-  <!-- TOP HEADER -->
-  <header class="header">
-    <div class="logo">AMK CLOTHING</div>
-    
-    <!-- SEARCH FORM -->
-    <form action="search-results.html" method="GET" class="search-container">
-      <input type="text" name="q" id="searchInput" placeholder="Search satin dress, orange dress, XXS..." required />
-      <button type="submit" class="search-btn" id="searchBtn">
-        <i class="fa-solid fa-magnifying-glass"></i>
-      </button>
-    </form>
-
-    <div class="nav-icons">
-      <a href="login-selection.html" class="icon-btn" title="Profile">
-        <i class="fa-regular fa-user"></i>
-      </a>
-      <a href="cart.html" class="icon-btn" title="Cart">
-        <i class="fa-solid fa-cart-shopping"></i>
-        <span class="badge" id="cartBadge">0</span>
-      </a>
-      <a href="wishlist.html" class="icon-btn" title="Wishlist">
-        <i class="fa-regular fa-heart"></i>
-        <span class="badge" id="wishlistBadge">0</span>
-      </a>
-      
-      <!-- DIRECT TAILOR SUPPORT CHAT LINK -->
-      <a href="client-support.html" class="icon-btn" title="Tailor Support Chat">
-        <i class="fa-solid fa-headset"></i>
-      </a>
-
-      <button class="icon-btn" id="langBtn" title="Language" onclick="alert('Language selected: English (ZA)')">
-        <i class="fa-solid fa-globe"></i>
-      </button>
-    </div>
+  <header class="store-header">
+    <a href="index.html" class="store-logo"><i class="fa-solid fa-scissors" style="color: #227b75;"></i> AMK CLOTHING</a>
+    <a href="cart.html" style="color: #ffffff; text-decoration: none; font-size: 13px; font-weight: bold;">&larr; Back to Cart &amp; Tracking</a>
   </header>
 
-  <!-- CATEGORY MENU TABS -->
-  <nav class="category-nav">
-    <button class="nav-item active" data-category="All">All</button>
-    <button class="nav-item" data-category="Women">Women</button>
-    <button class="nav-item" data-category="Curve">Curve</button>
-    <button class="nav-item" data-category="Kids">Kids</button>
-    <button class="nav-item" data-category="Men">Men</button>
-    <button class="nav-item" data-category="Traditional Attire">Traditional Attire</button>
-    <button class="nav-item" data-category="Petite">Petite</button>
-    <button class="nav-item" data-category="Accessories">Accessories</button>
-  </nav>
+  <div class="chat-container">
+    <div class="chat-card">
+      <div class="chat-header">
+        <div class="chat-title"><i class="fa-solid fa-headset" style="color:#227b75;"></i> Master Tailor Live Support (#AMK-8891)</div>
+        <div class="status-badge"><i class="fa-solid fa-circle" style="font-size: 8px;"></i> Tailors Online</div>
+      </div>
 
-  <!-- HERO SLIDER -->
-  <section class="hero-slider">
-    <div class="slide active">
-      <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1600&q=80" alt="Banner 1">
-      <div class="hero-content">
-        <h2>NEW SEASON STYLES</h2>
-        <p>Explore the trendiest dresses, traditional wear, and accessories.</p>
-        <button class="hero-btn">SHOP NOW</button>
-      </div>
-    </div>
-    <div class="slide">
-      <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=1600&q=80" alt="Banner 2">
-      <div class="hero-content">
-        <h2>EXCLUSIVE TRADITIONAL & MODERN</h2>
-        <p>Custom tailored designs made specifically for your look.</p>
-        <button class="hero-btn">DISCOVER</button>
-      </div>
-    </div>
-    <div class="slide">
-      <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1600&q=80" alt="Banner 3">
-      <div class="hero-content">
-        <h2>SUMMER COLLECTION 2026</h2>
-        <p>Up to 40% OFF on Curve & Petite collections.</p>
-        <button class="hero-btn">VIEW SALE</button>
-      </div>
-    </div>
-  </section>
+      <div class="chat-box" id="chatBox"></div>
 
-  <!-- CATEGORY CIRCLES -->
-  <section class="category-circles-section">
-    <div class="circle-card" data-category="Women">
-      <div class="circle-img-wrapper">
-        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80" alt="Women">
-      </div>
-      <span>Women</span>
-    </div>
+      <form class="chat-footer" onsubmit="handleSendMessage(event)">
+        <input type="text" id="chatInput" class="chat-input" placeholder="Type your message or ask about measurements..." autocomplete="off" required>
+        <button type="submit" class="send-btn"><i class="fa-solid fa-paper-plane"></i> Send</button>
+      </form>
 
-    <div class="circle-card" data-category="Curve">
-      <div class="circle-img-wrapper">
-        <img src="https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=400&q=80" alt="Curve">
-      </div>
-      <span>Curve</span>
-    </div>
-
-    <div class="circle-card" data-category="Kids">
-      <div class="circle-img-wrapper">
-        <img src="https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?auto=format&fit=crop&w=400&q=80" alt="Kids">
-      </div>
-      <span>Kids</span>
-    </div>
-
-    <div class="circle-card" data-category="Men">
-      <div class="circle-img-wrapper">
-        <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=400&q=80" alt="Men">
-      </div>
-      <span>Men</span>
-    </div>
-
-    <div class="circle-card" data-category="Traditional Attire">
-      <div class="circle-img-wrapper">
-        <img src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=400&q=80" alt="Traditional Attire">
-      </div>
-      <span>Traditional Attire</span>
-    </div>
-
-    <div class="circle-card" data-category="Petite">
-      <div class="circle-img-wrapper">
-        <img src="https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?auto=format&fit=crop&w=400&q=80" alt="Petite">
-      </div>
-      <span>Petite</span>
-    </div>
-
-    <div class="circle-card" data-category="Accessories">
-      <div class="circle-img-wrapper">
-        <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=400&q=80" alt="Accessories">
-      </div>
-      <span>Accessories</span>
-    </div>
-  </section>
-
-  <!-- MAIN PRODUCT GRID SECTION -->
-  <main class="products-container" id="productsSection">
-    
-    <h3 id="categoryTitle" class="section-title">All Products</h3>
-
-    <!-- CUSTOM BESPOKE TAILORING WORKSHOP BANNER -->
-    <div class="workshop-banner-card">
-      <div class="workshop-img-box">
-        <img src="images/Outfit.png" alt="Bespoke Tailoring Workshop" id="workshopImg" onerror="this.src='https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=800&q=80'">
-      </div>
-      <div class="workshop-text-box">
-        <span class="workshop-tag"><i class="fa-solid fa-scissors"></i> Custom Made To Order</span>
-        <h2 class="workshop-heading">Bespoke Tailoring & Custom Craftsmanship</h2>
-        <p class="workshop-desc">
-          At <strong>AMK Clothing</strong>, we do not sell off-the-rack or ready-made clothes! Every single outfit you see on our catalog serves as inspiration. We custom tailor each garment according to your unique measurements, choice of fabric, and style preference.
-        </p>
-        <a href="client-support.html" class="chat-tailor-btn">
-          <i class="fa-solid fa-headset"></i> Message Our Master Tailor
-        </a>
+      <!-- EDIT MODAL -->
+      <div class="modal-overlay" id="editModal">
+        <div class="modal-box">
+          <h3>Edit Message</h3>
+          <input type="text" id="editInput" placeholder="Update your message...">
+          <div class="modal-btns">
+            <button class="modal-btn btn-cancel" onclick="closeEditModal()">Cancel</button>
+            <button class="modal-btn btn-save" onclick="saveEditedMessage()">Save Changes</button>
+          </div>
+        </div>
       </div>
     </div>
-
-    <!-- PRODUCT DYNAMIC GRID -->
-    <div class="product-grid" id="productGrid">
-      <!-- Products render dynamically from script.js -->
-    </div>
-  </main>
+  </div>
 
   <script src="script.js"></script>
+  <script>
+    let activeEditIndex = null;
+    const INITIAL_SEED = [
+      { sender: 'tailor', text: 'Hello Latecia! Welcome to AMK Clothing bespoke support. Our master tailors have received your order #AMK-8891. Send us your measurements or styling notes here!', time: 'Just now', isDeleted: false }
+    ];
+
+    function loadChatMessages() {
+      let messages = JSON.parse(localStorage.getItem('amk_chat_messages'));
+      if (!messages || messages.length === 0) {
+        messages = INITIAL_SEED;
+        localStorage.setItem('amk_chat_messages', JSON.stringify(messages));
+      }
+
+      const chatBox = document.getElementById('chatBox');
+      chatBox.innerHTML = '';
+
+      messages.forEach((msg, index) => {
+        const isClient = msg.sender === 'client';
+        const isDeleted = msg.isDeleted;
+
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `msg ${isClient ? 'msg-client' : 'msg-tailor'} ${isDeleted ? 'deleted-msg' : ''}`;
+        
+        let actionsHtml = '';
+        if (isClient && !isDeleted) {
+          actionsHtml = `
+            <div class="msg-actions">
+              <button class="action-btn" onclick="openEditModal(${index})"><i class="fa-solid fa-pen"></i> Edit</button>
+              <button class="action-btn action-btn-del" onclick="deleteMessage(${index})"><i class="fa-solid fa-trash"></i> Delete</button>
+            </div>
+          `;
+        }
+
+        msgDiv.innerHTML = `
+          <div>${isDeleted ? '<i>🚫 This message was deleted</i>' : msg.text}</div>
+          <div class="msg-time">${msg.time} ${msg.isEdited ? '(edited)' : ''}</div>
+          ${actionsHtml}
+        `;
+
+        chatBox.appendChild(msgDiv);
+      });
+
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function deleteMessage(index) {
+      let messages = JSON.parse(localStorage.getItem('amk_chat_messages')) || [];
+      messages[index].isDeleted = true;
+      messages[index].text = "🚫 This message was deleted";
+      localStorage.setItem('amk_chat_messages', JSON.stringify(messages));
+      loadChatMessages();
+    }
+
+    function openEditModal(index) {
+      let messages = JSON.parse(localStorage.getItem('amk_chat_messages')) || [];
+      activeEditIndex = index;
+      document.getElementById('editInput').value = messages[index].text;
+      document.getElementById('editModal').style.display = 'flex';
+    }
+
+    function closeEditModal() {
+      activeEditIndex = null;
+      document.getElementById('editModal').style.display = 'none';
+    }
+
+    function saveEditedMessage() {
+      const newText = document.getElementById('editInput').value.trim();
+      if (!newText || activeEditIndex === null) return;
+
+      let messages = JSON.parse(localStorage.getItem('amk_chat_messages')) || [];
+      messages[activeEditIndex].text = newText;
+      messages[activeEditIndex].isEdited = true;
+      localStorage.setItem('amk_chat_messages', JSON.stringify(messages));
+      
+      closeEditModal();
+      loadChatMessages();
+    }
+
+    function handleSendMessage(e) {
+      e.preventDefault();
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      let messages = JSON.parse(localStorage.getItem('amk_chat_messages')) || INITIAL_SEED;
+      messages.push({ sender: 'client', text: text, time: timeStr, isDeleted: false, isEdited: false });
+
+      localStorage.setItem('amk_chat_messages', JSON.stringify(messages));
+      input.value = '';
+      loadChatMessages();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadChatMessages();
+      setInterval(loadChatMessages, 1500);
+    });
+  </script>
 </body>
 </html>

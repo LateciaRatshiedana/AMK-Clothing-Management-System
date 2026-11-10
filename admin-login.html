@@ -6,6 +6,18 @@
   <title>AMK Clothing - Admin & Worker Login</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .error-msg {
+      color: #e53e3e;
+      font-size: 11px;
+      margin-top: 4px;
+      display: none;
+      font-weight: 600;
+    }
+    .input-error {
+      border-color: #e53e3e !important;
+    }
+  </style>
 </head>
 <body class="page-center">
 
@@ -18,15 +30,16 @@
       <p>Admin & Worker Portal</p>
     </div>
 
-    <!-- Redirects directly to admin-home.html -->
-    <form action="admin-home.html" method="GET">
+    <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
       <div class="form-group">
         <label>Staff/Admin Email</label>
-        <input type="email" required placeholder="admin@amkclothing.com" value="admin@amkclothing.com">
+        <input type="email" id="adminEmailInput" required placeholder="admin@amkclothing.com" value="admin@amkclothing.com">
+        <div class="error-msg" id="adminEmailError">Please enter a valid staff email domain.</div>
       </div>
       <div class="form-group">
         <label>Password</label>
-        <input type="password" required placeholder="••••••••" value="admin123">
+        <input type="password" id="adminPasswordInput" required placeholder="••••••••" value="admin123">
+        <div class="error-msg" id="adminPasswordError">Admin password must be at least 6 characters.</div>
       </div>
       <button type="submit" class="primary-btn">Sign In as Admin/Worker</button>
     </form>
@@ -35,6 +48,42 @@
 
     <a href="login-selection.html" class="close-modal-text" style="display: block; text-align: center; margin-top: 15px; text-decoration: none;">← Back to Portal Selection</a>
   </div>
+
+  <script>
+    function handleAdminLogin(event) {
+      event.preventDefault();
+
+      const email = document.getElementById('adminEmailInput').value.trim();
+      const password = document.getElementById('adminPasswordInput').value;
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+      let isValid = true;
+
+      if (!emailRegex.test(email)) {
+        document.getElementById('adminEmailInput').classList.add('input-error');
+        document.getElementById('adminEmailError').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('adminEmailInput').classList.remove('input-error');
+        document.getElementById('adminEmailError').style.display = 'none';
+      }
+
+      if (password.length < 6) {
+        document.getElementById('adminPasswordInput').classList.add('input-error');
+        document.getElementById('adminPasswordError').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('adminPasswordInput').classList.remove('input-error');
+        document.getElementById('adminPasswordError').style.display = 'none';
+      }
+
+      if (isValid) {
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('userType', 'admin');
+        window.location.href = 'admin-home.html';
+      }
+    }
+  </script>
 
 </body>
 </html>

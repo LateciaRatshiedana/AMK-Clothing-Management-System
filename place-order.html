@@ -42,8 +42,18 @@
       margin-bottom: 25px;
       font-weight: 600;
     }
-    .breadcrumb span {
+    .breadcrumb a {
+      color: #64748b;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .breadcrumb a:hover {
       color: #227b75;
+      text-decoration: underline;
+    }
+    .breadcrumb .active-step {
+      color: #227b75;
+      font-weight: 800;
     }
     .checkout-card {
       background: #ffffff;
@@ -115,7 +125,10 @@
 
   <div class="container">
     <div class="breadcrumb">
-      Cart > <span>Place Order</span> > Pay > Order Complete
+      <a href="cart.html">Cart</a> &gt; 
+      <span class="active-step">Place Order</span> &gt; 
+      <a href="payment.html">Pay</a> &gt; 
+      <a href="order-complete.html">Order Complete</a>
     </div>
 
     <div class="checkout-card">
@@ -139,7 +152,7 @@
 
         <div class="form-group">
           <label>Delivery Address (Johannesburg / Nationwide)</label>
-          <textarea rows="3" placeholder="Enter street address, suburb, and city..." required>Braamfontein, Johannesburg, 2001</textarea>
+          <textarea id="custAddress" rows="3" placeholder="Enter street address, suburb, and city..." required>Braamfontein, Johannesburg, 2001</textarea>
         </div>
 
         <button type="submit" class="btn-proceed">
@@ -152,9 +165,17 @@
   <script>
     function handleProceedToPay(e) {
       e.preventDefault();
-      alert("Order details saved successfully! Proceeding to payment.");
-      // You can point this to your payment page or order completion flow
-      window.location.href = "cart.html"; 
+      
+      const shippingData = {
+        name: document.getElementById('custName').value,
+        phone: document.getElementById('custPhone').value,
+        email: document.getElementById('custEmail').value,
+        address: document.getElementById('custAddress').value
+      };
+      localStorage.setItem('amk_shipping', JSON.stringify(shippingData));
+
+      // Redirect directly to payment.html
+      window.location.href = "payment.html"; 
     }
   </script>
 
