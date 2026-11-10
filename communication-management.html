@@ -3,42 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AMK Clothing - Client Communication &amp; Messages</title>
+  <title>AMK Clothing - Tailor Live Support</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body { background-color: #f8fafc; margin: 0; font-family: Arial, sans-serif; color: #0f172a; }
     .store-header { background-color: #000000; color: #ffffff; padding: 16px 30px; display: flex; justify-content: space-between; align-items: center; }
     .store-logo { font-size: 20px; font-weight: 900; letter-spacing: 1px; color: #ffffff; text-decoration: none; display: flex; align-items: center; gap: 10px; }
-    .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
-    h2 { font-size: 24px; font-weight: 900; margin-bottom: 4px; }
-    .subtitle { color: #64748b; font-size: 13px; margin-bottom: 25px; }
-
-    .comm-grid { display: grid; grid-template-columns: 320px 1fr; gap: 20px; }
-    .sidebar-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
-    .client-item { padding: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 12px; background: #f8fafc; border: 1px solid #e2e8f0; margin-bottom: 10px; }
-    .client-item.active { background: #e6f4f3; border-color: #227b75; }
-    .avatar { width: 38px; height: 38px; background: #227b75; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; }
-    
-    .chat-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); display: flex; flex-direction: column; height: 580px; position: relative; }
-    .chat-header { padding: 16px 20px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+    .chat-container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+    .chat-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; height: 620px; position: relative; }
+    .chat-header { background: #0f172a; color: #ffffff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .chat-title { font-weight: 800; font-size: 16px; display: flex; align-items: center; gap: 10px; }
+    .status-badge { font-size: 12px; color: #4ade80; display: flex; align-items: center; gap: 6px; }
     .chat-box { flex: 1; padding: 20px; overflow-y: auto; background: #f8fafc; display: flex; flex-direction: column; gap: 12px; }
     
     .msg { max-width: 75%; padding: 12px 16px; border-radius: 10px; font-size: 14px; line-height: 1.4; position: relative; }
-    .msg-client { background: #ffffff; border: 1px solid #e2e8f0; align-self: flex-start; color: #0f172a; }
-    .msg-tailor { background: #227b75; color: #ffffff; align-self: flex-end; }
+    .msg-tailor { background: #ffffff; border: 1px solid #e2e8f0; align-self: flex-start; color: #0f172a; }
+    .msg-client { background: #227b75; color: #ffffff; align-self: flex-end; }
+    .msg img { max-width: 100%; border-radius: 6px; margin-top: 6px; display: block; max-height: 200px; object-fit: cover; }
     .msg-time { font-size: 10px; margin-top: 4px; opacity: 0.8; text-align: right; }
     .deleted-msg { font-style: italic; opacity: 0.7; color: #cbd5e1 !important; background: #334155 !important; border: 1px dashed #64748b !important; }
-
+    
     .msg-actions { margin-top: 6px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.2); display: flex; justify-content: flex-end; gap: 8px; }
     .action-btn { background: rgba(0,0,0,0.25); color: #fff; border: none; padding: 2px 8px; border-radius: 4px; font-size: 10px; cursor: pointer; font-weight: bold; }
-    .action-btn:hover { background: rgba(0,0,0,0.45); }
     .action-btn-del { background: rgba(239, 68, 68, 0.8); }
-    .action-btn-del:hover { background: rgba(220, 38, 38, 1); }
 
-    .chat-footer { padding: 15px 20px; background: #ffffff; border-top: 1px solid #e2e8f0; display: flex; gap: 10px; }
+    .chat-footer { padding: 15px 20px; background: #ffffff; border-top: 1px solid #e2e8f0; display: flex; gap: 10px; align-items: center; }
     .chat-input { flex: 1; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; font-size: 14px; }
-    .send-btn { background: #0f172a; color: #ffffff; border: none; padding: 0 20px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    .file-upload-btn { background: #f1f5f9; border: 1px solid #cbd5e1; color: #0f172a; padding: 11px 14px; border-radius: 6px; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; }
+    .file-upload-btn:hover { background: #e2e8f0; }
+    .send-btn { background: #227b75; color: #ffffff; border: none; padding: 11px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px; }
 
     /* EDIT MODAL */
     .modal-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.6); display: none; align-items: center; justify-content: center; z-index: 100; }
@@ -47,7 +41,7 @@
     .modal-box input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; margin-bottom: 15px; outline: none; }
     .modal-btns { display: flex; justify-content: flex-end; gap: 8px; }
     .modal-btn { padding: 8px 14px; border-radius: 4px; border: none; font-weight: bold; font-size: 12px; cursor: pointer; }
-    .btn-save { background: #0f172a; color: #fff; }
+    .btn-save { background: #227b75; color: #fff; }
     .btn-cancel { background: #e2e8f0; color: #0f172a; }
   </style>
 </head>
@@ -55,52 +49,35 @@
 
   <header class="store-header">
     <a href="index.html" class="store-logo"><i class="fa-solid fa-scissors" style="color: #227b75;"></i> AMK CLOTHING</a>
-    <a href="order-management.html" style="color: #ffffff; text-decoration: none; font-size: 13px; font-weight: bold;">&larr; Back to Order Management</a>
+    <a href="cart.html" style="color: #ffffff; text-decoration: none; font-size: 13px; font-weight: bold;">&larr; Back to Cart &amp; Tracking</a>
   </header>
 
-  <div class="container">
-    <h2>Client Communication &amp; Messages</h2>
-    <div class="subtitle">Respond to customer fitting inquiries, send tailoring updates, and manage client messages</div>
-
-    <div class="comm-grid">
-      <div class="sidebar-card">
-        <h3 style="font-size:14px; margin-top:0; margin-bottom:15px; color:#64748b;">Client Conversations</h3>
-        <div class="client-item active">
-          <div class="avatar">LR</div>
-          <div>
-            <div style="font-weight:bold; font-size:14px;">Latecia Ratshiedana</div>
-            <div style="font-size:11px; color:#64748b;">Order Ref: #AMK-8891</div>
-          </div>
-        </div>
+  <div class="chat-container">
+    <div class="chat-card">
+      <div class="chat-header">
+        <div class="chat-title"><i class="fa-solid fa-headset" style="color:#227b75;"></i> Master Tailor Live Support (#AMK-8891)</div>
+        <div class="status-badge"><i class="fa-solid fa-circle" style="font-size: 8px;"></i> Tailors Online</div>
       </div>
 
-      <div class="chat-card">
-        <div class="chat-header">
-          <div>
-            <div style="font-weight:bold; font-size:16px;">Latecia Ratshiedana</div>
-            <div style="font-size:12px; color:#64748b;">Order Ref: #AMK-8891 (Orange Satin Evening Dress)</div>
-          </div>
-          <button style="background:#0f172a; color:#fff; border:none; padding:8px 14px; border-radius:6px; font-weight:bold; font-size:12px; cursor:pointer;" onclick="alert('Fitting alert notification sent to client dashboard!')">
-            <i class="fa-solid fa-calendar-check"></i> Book Fitting Alert
-          </button>
-        </div>
+      <div class="chat-box" id="chatBox"></div>
 
-        <div class="chat-box" id="adminChatBox"></div>
+      <form class="chat-footer" onsubmit="handleSendMessage(event)">
+        <label for="imageInput" class="file-upload-btn" title="Upload Reference Image">
+          <i class="fa-solid fa-image"></i>
+        </label>
+        <input type="file" id="imageInput" accept="image/*" style="display:none;" onchange="handleImageUpload(event)">
+        <input type="text" id="chatInput" class="chat-input" placeholder="Type your message or upload a design photo..." autocomplete="off">
+        <button type="submit" class="send-btn"><i class="fa-solid fa-paper-plane"></i> Send</button>
+      </form>
 
-        <form class="chat-footer" onsubmit="handleAdminSendMessage(event)">
-          <input type="text" id="adminChatInput" class="chat-input" placeholder="Type response to client..." autocomplete="off" required>
-          <button type="submit" class="send-btn">Send Reply</button>
-        </form>
-
-        <!-- EDIT MODAL -->
-        <div class="modal-overlay" id="adminEditModal">
-          <div class="modal-box">
-            <h3>Edit Tailor Reply</h3>
-            <input type="text" id="adminEditInput" placeholder="Update your reply...">
-            <div class="modal-btns">
-              <button class="modal-btn btn-cancel" onclick="closeAdminEditModal()">Cancel</button>
-              <button class="modal-btn btn-save" onclick="saveAdminEditedMessage()">Save Changes</button>
-            </div>
+      <!-- EDIT MODAL -->
+      <div class="modal-overlay" id="editModal">
+        <div class="modal-box">
+          <h3>Edit Message</h3>
+          <input type="text" id="editInput" placeholder="Update your message...">
+          <div class="modal-btns">
+            <button class="modal-btn btn-cancel" onclick="closeEditModal()">Cancel</button>
+            <button class="modal-btn btn-save" onclick="saveEditedMessage()">Save Changes</button>
           </div>
         </div>
       </div>
@@ -109,14 +86,19 @@
 
   <script src="script.js"></script>
   <script>
-    let activeAdminEditIndex = null;
+    let activeEditIndex = null;
+    const INITIAL_SEED = [
+      { sender: 'tailor', text: 'Hello Latecia! Welcome to AMK Clothing bespoke support. Send us your measurements or design inspiration photos here!', time: 'Just now', isDeleted: false }
+    ];
 
-    function loadAdminChatMessages() {
-      let messages = JSON.parse(localStorage.getItem('amk_chat_messages')) || [
-        { sender: 'tailor', text: 'Hello Latecia! Welcome to AMK Clothing bespoke support. Our master tailors have received your order #AMK-8891. Send us your measurements or styling notes here!', time: 'Just now', isDeleted: false }
-      ];
+    function loadChatMessages() {
+      let messages = JSON.parse(localStorage.getItem('amk_chat_messages'));
+      if (!messages || messages.length === 0) {
+        messages = INITIAL_SEED;
+        localStorage.setItem('amk_chat_messages', JSON.stringify(messages));
+      }
 
-      const chatBox = document.getElementById('adminChatBox');
+      const chatBox = document.getElementById('chatBox');
       chatBox.innerHTML = '';
 
       messages.forEach((msg, index) => {
@@ -126,18 +108,23 @@
         const msgDiv = document.createElement('div');
         msgDiv.className = `msg ${isClient ? 'msg-client' : 'msg-tailor'} ${isDeleted ? 'deleted-msg' : ''}`;
         
+        let contentHtml = isDeleted ? '<i>🚫 This message was deleted</i>' : msg.text;
+        if (!isDeleted && msg.image) {
+          contentHtml += `<br><img src="${msg.image}" alt="Reference Photo">`;
+        }
+
         let actionsHtml = '';
-        if (!isClient && !isDeleted) {
+        if (isClient && !isDeleted) {
           actionsHtml = `
             <div class="msg-actions">
-              <button class="action-btn" onclick="openAdminEditModal(${index})"><i class="fa-solid fa-pen"></i> Edit</button>
-              <button class="action-btn action-btn-del" onclick="deleteAdminMessage(${index})"><i class="fa-solid fa-trash"></i> Delete</button>
+              ${msg.text ? `<button class="action-btn" onclick="openEditModal(${index})"><i class="fa-solid fa-pen"></i> Edit</button>` : ''}
+              <button class="action-btn action-btn-del" onclick="deleteMessage(${index})"><i class="fa-solid fa-trash"></i> Delete</button>
             </div>
           `;
         }
 
         msgDiv.innerHTML = `
-          <div>${isDeleted ? '<i>🚫 This message was deleted</i>' : msg.text}</div>
+          <div>${contentHtml}</div>
           <div class="msg-time">${msg.time} ${msg.isEdited ? '(edited)' : ''}</div>
           ${actionsHtml}
         `;
@@ -148,59 +135,80 @@
       chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    function deleteAdminMessage(index) {
+    function deleteMessage(index) {
       let messages = JSON.parse(localStorage.getItem('amk_chat_messages')) || [];
       messages[index].isDeleted = true;
       messages[index].text = "🚫 This message was deleted";
+      delete messages[index].image;
       localStorage.setItem('amk_chat_messages', JSON.stringify(messages));
-      loadAdminChatMessages();
+      loadChatMessages();
     }
 
-    function openAdminEditModal(index) {
+    function openEditModal(index) {
       let messages = JSON.parse(localStorage.getItem('amk_chat_messages')) || [];
-      activeAdminEditIndex = index;
-      document.getElementById('adminEditInput').value = messages[index].text;
-      document.getElementById('adminEditModal').style.display = 'flex';
+      activeEditIndex = index;
+      document.getElementById('editInput').value = messages[index].text;
+      document.getElementById('editModal').style.display = 'flex';
     }
 
-    function closeAdminEditModal() {
-      activeAdminEditIndex = null;
-      document.getElementById('adminEditModal').style.display = 'none';
+    function closeEditModal() {
+      activeEditIndex = null;
+      document.getElementById('editModal').style.display = 'none';
     }
 
-    function saveAdminEditedMessage() {
-      const newText = document.getElementById('adminEditInput').value.trim();
-      if (!newText || activeAdminEditIndex === null) return;
+    function saveEditedMessage() {
+      const newText = document.getElementById('editInput').value.trim();
+      if (!newText || activeEditIndex === null) return;
 
       let messages = JSON.parse(localStorage.getItem('amk_chat_messages')) || [];
-      messages[activeAdminEditIndex].text = newText;
-      messages[activeAdminEditIndex].isEdited = true;
+      messages[activeEditIndex].text = newText;
+      messages[activeEditIndex].isEdited = true;
       localStorage.setItem('amk_chat_messages', JSON.stringify(messages));
       
-      closeAdminEditModal();
-      loadAdminChatMessages();
+      closeEditModal();
+      loadChatMessages();
     }
 
-    function handleAdminSendMessage(e) {
+    function handleSendMessage(e) {
       e.preventDefault();
-      const input = document.getElementById('adminChatInput');
+      const input = document.getElementById('chatInput');
       const text = input.value.trim();
       if (!text) return;
 
       const now = new Date();
       const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-      let messages = JSON.parse(localStorage.getItem('amk_chat_messages')) || [];
-      messages.push({ sender: 'tailor', text: text, time: timeStr, isDeleted: false, isEdited: false });
+      let messages = JSON.parse(localStorage.getItem('amk_chat_messages')) || INITIAL_SEED;
+      messages.push({ sender: 'client', text: text, time: timeStr, isDeleted: false, isEdited: false });
 
       localStorage.setItem('amk_chat_messages', JSON.stringify(messages));
       input.value = '';
-      loadAdminChatMessages();
+      loadChatMessages();
+    }
+
+    function handleImageUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(uploadEvent) {
+        const imageUrl = uploadEvent.target.result;
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        let messages = JSON.parse(localStorage.getItem('amk_chat_messages')) || INITIAL_SEED;
+        messages.push({ sender: 'client', text: '📷 Custom Design Reference Photo:', image: imageUrl, time: timeStr, isDeleted: false, isEdited: false });
+
+        localStorage.setItem('amk_chat_messages', JSON.stringify(messages));
+        loadChatMessages();
+      };
+      reader.readAsDataURL(file);
+      e.target.value = '';
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      loadAdminChatMessages();
-      setInterval(loadAdminChatMessages, 1500);
+      loadChatMessages();
+      setInterval(loadChatMessages, 1500);
     });
   </script>
 </body>
